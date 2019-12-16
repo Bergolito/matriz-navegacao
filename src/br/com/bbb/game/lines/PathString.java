@@ -27,6 +27,10 @@ class PathString {
 	public boolean isPath(String[][] matrix) {
 		boolean isPath = false;
 		
+		if(!validaMatrizEntrada(matrix)) {
+			System.out.println("Matriz inválida!!!");
+		}
+		
 		// defining visited array to keep
 		// track of already visited indexes
 		int rows = matrix.length;
@@ -71,7 +75,32 @@ class PathString {
 		
 		return isPath;
 	}
-
+	
+	/*
+	 * Matriz pode ter somente uma origem e um destinatário
+	 */
+	private boolean validaMatrizEntrada(String[][] matriz) {
+	
+		int countSource = 0;
+		int countdestination = 0;
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz.length; j++) {
+				if(matriz[i][j].equals(SOURCE)) {
+					countSource++;		
+				}
+				if(matriz[i][j].equals(DEST)) {
+					countdestination++;		
+				}
+			}
+		}
+		
+		if(countSource == 1 && countdestination == 1) {
+			return true;	
+		} else {
+			return false;
+		}
+	}
+	
 	public void imprimeMatriz(boolean[][] visited) {
 		for (int i = 0; i < visited.length; i++) {
 			System.out.print("[");
