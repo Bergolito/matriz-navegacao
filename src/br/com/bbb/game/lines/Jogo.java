@@ -33,7 +33,7 @@ public class Jogo {
 		int colunas = 6;
 		int trinca = 3;
 		int qtdBolasIniciais = 4;
-		int qtdBolasNovas = 3;
+		int qtdNovasBolas = 3;
 
         // Using Scanner for Getting Input from User 
         Scanner in = new Scanner(System.in); 
@@ -41,15 +41,15 @@ public class Jogo {
 		Jogo jogoLines = new Jogo(linhas, colunas, trinca);
 		
 		jogoLines.inicializaJogo(qtdBolasIniciais);
-		int p1X, p1Y, p2X, p2Y;
-		p1X = 0; 
-		p1Y = 0;
-		p2X = 0;
-		p2Y = 0;
+		//int p1X, p1Y, p2X, p2Y;
+		int p1X = 0; 
+		int p1Y = 0;
+		int p2X = 0;
+		int p2Y = 0;
 		
 		while(!jogoLines.getCelulasVazias().isEmpty()) {
 			
-	        System.out.println("Digite posicao1 x,y= "); 
+	        System.out.println("\nDigite posicao1 x,y= "); 
 	        String posicaoBola1 = in.nextLine(); 
 	        System.out.println("["+posicaoBola1+"]");
 	        
@@ -57,7 +57,7 @@ public class Jogo {
 	        p1X = Integer.valueOf(tkPos1[0]);
 	        p1Y = Integer.valueOf(tkPos1[1]);
 	        
-	        System.out.println("Digite posicao2 x,y= "); 
+	        System.out.println("\nDigite posicao2 x,y= "); 
 	        String posicaoBola2 = in.nextLine(); 
 	        System.out.println("["+posicaoBola2+"]");
 	        String[] tkPos2 = posicaoBola2.split(",");
@@ -66,6 +66,11 @@ public class Jogo {
 
 	        jogoLines.movimentaBola(p1X, p1Y, p2X, p2Y);
 	        // cria mais qtdBolasNovas no tabuleiro 
+	        jogoLines.preencheTabuleiroNovasBolas(qtdNovasBolas);
+	        
+	        jogoLines.imprimeListaCelulas("Celulas Vazias=", jogoLines.getCelulasVazias());
+	        jogoLines.imprimeListaCelulas("Celulas Preenchidas=", jogoLines.getCelulasPreenchidas());
+	        jogoLines.atualizaMatrizPrincipal(jogoLines.getCelulasPreenchidas());
 	        jogoLines.imprimeMatriz(jogoLines.getMatrizBolas());
 	        
 	        jogoLines.atualizaScore();
@@ -78,7 +83,7 @@ public class Jogo {
 		// TODO Auto-generated method stub
 		Celula celOrigem = null;
 		Celula celDestino = new Celula();
-		Cores corDestino = null;
+		//Cores corDestino = null;
 		for (int i = 0; i < matrizBolas.length; i++) {
 			for (int j = 0; j < matrizBolas[i].length; j++) {
 				if((p1X == i && p1Y == j)) {
@@ -115,7 +120,18 @@ public class Jogo {
 
 	private void preencheTabuleiroNovasBolas(int qtdNovasBolas) {
 		// TODO Auto-generated method stub
-		
+		// preenche celulas com Bolas iniciais
+		int indice = -1;
+		int indiceCor = -1;
+		Celula cel = null;
+		Cores cor = null;
+		for (int i = 0; i <= qtdNovasBolas; i++) {
+			indice = ((int)(Math.random() * 100) % celulasVazias.size());
+			indiceCor = ((int)(Math.random() * 100) % Cores.values().length);
+			cor = Cores.values()[indiceCor];
+			cel = new Celula(celulasVazias.get(indice).getX(), celulasVazias.get(indice).getY(), cor, cor.getCodigo());
+			celulasPreenchidas.add(cel);
+		}
 	}
 	
 	private void atualizaScore() {
@@ -358,7 +374,7 @@ public class Jogo {
 		imprimeListaCelulas("Celulas Vazias=", celulasVazias);
 		imprimeMatriz(matrizBolas);
 		
-		// preenche celulas Preenchidas
+		// preenche celulas com Bolas iniciais
 		int indice = -1;
 		int indiceCor = -1;
 		Celula cel = null;
@@ -396,6 +412,6 @@ public class Jogo {
 			celulasVazias.remove(i);
 		}
 		imprimeListaCelulas("\nCelulas Vazias=", celulasVazias);
-		testaTrinca();
+		//testaTrinca();
 	}
 }
