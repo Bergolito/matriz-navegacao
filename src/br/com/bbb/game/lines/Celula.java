@@ -2,12 +2,13 @@ package br.com.bbb.game.lines;
 
 public class Celula {
 
+	// atributos
 	private int x;
 	private int y;
 	private Cores cor;
 	private String texto;
 
-	//
+	// construtores
 	public Celula() {
 		super();
 	}
@@ -50,6 +51,7 @@ public class Celula {
 	public void setTexto(String texto) {
 		this.texto = texto;
 	}
+	
 	//
 	@Override
 	public int hashCode() {
@@ -61,6 +63,7 @@ public class Celula {
 		result = prime * result + y;
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
