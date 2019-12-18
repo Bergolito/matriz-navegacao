@@ -39,7 +39,6 @@ public class Jogo {
         Scanner in = new Scanner(System.in); 
         
 		Jogo jogoLines = new Jogo(linhas, colunas, trinca);
-		
 		jogoLines.inicializaJogo(qtdBolasIniciais);
 		int p1X = 0; 
 		int p1Y = 0;
@@ -163,12 +162,15 @@ public class Jogo {
 		int indiceCor = -1;
 		Celula cel = null;
 		Cores cor = null;
-		for (int i = 0; i <= qtdNovasBolas; i++) {
+		System.out.println("Novas bolas inseridas = ");
+		for (int i = 0; i < qtdNovasBolas; i++) {
 			indice = ((int)(Math.random() * 100) % celulasVazias.size());
 			indiceCor = ((int)(Math.random() * 100) % Cores.values().length);
 			cor = Cores.values()[indiceCor];
+			System.out.print("["+indice+"-("+celulasVazias.get(indice).getX()+","+celulasVazias.get(indice).getY()+")]->");
 			cel = new Celula(celulasVazias.get(indice).getX(), celulasVazias.get(indice).getY(), cor, cor.getCodigo());
 			celulasPreenchidas.add(cel);
+			celulasVazias.remove(cel);
 		}
 	}
 	
@@ -191,8 +193,66 @@ public class Jogo {
     	this.setScore(score);
 	}
 
-	private void testaTrinca() {
-		/**
+	/**
+		[ VD 00 00 LA LA 00 ]
+		[ RS 00 00 00 00 00 ]
+		[ AM VM 00 00 00 RX ]
+		[ 00 00 RX VM 00 VD ]
+		[ 00 00 RX 00 00 00 ]
+		[ 00 00 00 AZ AZ AZ ]
+	 */
+	private void testaTrinca02() {
+		Celula[][] matriz1 = new Celula[6][6];
+		//[ VD 00 00 LA LA 00 ]
+		matriz1[0][0] = new Celula(0, 0, null, "VD");
+		matriz1[0][1] = new Celula(0, 0, null, "00");
+		matriz1[0][2] = new Celula(0, 0, null, "00");
+		matriz1[0][3] = new Celula(0, 0, null, "LA");
+		matriz1[0][4] = new Celula(0, 0, null, "LA");
+		matriz1[0][5] = new Celula(0, 0, null, "00");
+		//[ RS 00 00 00 00 00 ]
+		matriz1[1][0] = new Celula(0, 0, null, "RS");
+		matriz1[1][1] = new Celula(0, 0, null, "00");
+		matriz1[1][2] = new Celula(0, 0, null, "00");
+		matriz1[1][3] = new Celula(0, 0, null, "00");
+		matriz1[1][4] = new Celula(0, 0, null, "00");
+		matriz1[1][5] = new Celula(0, 0, null, "00");
+		//[ AM VM 00 00 00 RX ]
+		matriz1[2][0] = new Celula(0, 0, null, "AM");
+		matriz1[2][1] = new Celula(0, 0, null, "VM");
+		matriz1[2][2] = new Celula(0, 0, null, "00");
+		matriz1[2][3] = new Celula(0, 0, null, "00");
+		matriz1[2][4] = new Celula(0, 0, null, "00");
+		matriz1[2][5] = new Celula(0, 0, null, "RX");
+		//[ 00 00 RX VM 00 VD ]
+		matriz1[3][0] = new Celula(0, 0, null, "00");
+		matriz1[3][1] = new Celula(0, 0, null, "00");
+		matriz1[3][2] = new Celula(0, 0, null, "RX");
+		matriz1[3][3] = new Celula(0, 0, null, "VM");
+		matriz1[3][4] = new Celula(0, 0, null, "00");
+		matriz1[3][5] = new Celula(0, 0, null, "VD");
+		//[ 00 00 RX 00 00 00 ]
+		matriz1[4][0] = new Celula(0, 0, null, "00");
+		matriz1[4][1] = new Celula(0, 0, null, "00");
+		matriz1[4][2] = new Celula(0, 0, null, "RX");
+		matriz1[4][3] = new Celula(0, 0, null, "00");
+		matriz1[4][4] = new Celula(0, 0, null, "00");
+		matriz1[4][5] = new Celula(0, 0, null, "00");
+		//[ 00 00 00 AZ AZ AZ ]
+		matriz1[5][0] = new Celula(0, 0, null, "00");
+		matriz1[5][1] = new Celula(0, 0, null, "00");
+		matriz1[5][2] = new Celula(0, 0, null, "00");
+		matriz1[5][3] = new Celula(0, 0, null, "AZ");
+		matriz1[5][4] = new Celula(0, 0, null, "AZ");
+		matriz1[5][5] = new Celula(0, 0, null, "AZ");
+		
+		System.out.println("\nExiste trinca? "+verificaTrinca(matriz1));
+		
+	}
+	
+	private void testaTrinca01() {
+		//VM,00,AZ
+		/** 
 		[ 00 00 RS CI AM 00 ]
 		[ 00 00 00 00 LA 00 ]
 		[ RS VD VM LA AM 00 ]
@@ -201,41 +261,42 @@ public class Jogo {
 		[ 00 CI 00 00 00 00 ]		
 		 */
 		Celula[][] matriz1 = new Celula[6][6];
+		//[ 00 00 RS CI AM 00 ]
 		matriz1[0][0] = new Celula(0, 0, null, "00");
 		matriz1[0][1] = new Celula(0, 0, null, "00");
 		matriz1[0][2] = new Celula(0, 0, null, "RS");
 		matriz1[0][3] = new Celula(0, 0, null, "CI");
 		matriz1[0][4] = new Celula(0, 0, null, "AM");
 		matriz1[0][5] = new Celula(0, 0, null, "00");
-
+		//[ 00 00 00 00 LA 00 ]
 		matriz1[1][0] = new Celula(0, 0, null, "00");
 		matriz1[1][1] = new Celula(0, 0, null, "00");
 		matriz1[1][2] = new Celula(0, 0, null, "00");
 		matriz1[1][3] = new Celula(0, 0, null, "00");
 		matriz1[1][4] = new Celula(0, 0, null, "LA");
 		matriz1[1][5] = new Celula(0, 0, null, "00");
-				
+		//[ RS VD VM LA AM 00 ]		
 		matriz1[2][0] = new Celula(0, 0, null, "RS");
 		matriz1[2][1] = new Celula(0, 0, null, "VD");
 		matriz1[2][2] = new Celula(0, 0, null, "VM");
 		matriz1[2][3] = new Celula(0, 0, null, "LA");
 		matriz1[2][4] = new Celula(0, 0, null, "AM");
 		matriz1[2][5] = new Celula(0, 0, null, "00");
-		
+        //[ RX VD LA CI 00 00 ]
 		matriz1[3][0] = new Celula(0, 0, null, "RX");
 		matriz1[3][1] = new Celula(0, 0, null, "VD");
 		matriz1[3][2] = new Celula(0, 0, null, "LA");
 		matriz1[3][3] = new Celula(0, 0, null, "CI");
 		matriz1[3][4] = new Celula(0, 0, null, "00");
 		matriz1[3][5] = new Celula(0, 0, null, "00");
-		
+		//[ 00 00 VM 00 00 00 ]
 		matriz1[4][0] = new Celula(0, 0, null, "00");
 		matriz1[4][1] = new Celula(0, 0, null, "00");
 		matriz1[4][2] = new Celula(0, 0, null, "VM");
 		matriz1[4][3] = new Celula(0, 0, null, "00");
 		matriz1[4][4] = new Celula(0, 0, null, "00");
 		matriz1[4][5] = new Celula(0, 0, null, "00");
-		
+		//[ 00 CI 00 00 00 00 ]
 		matriz1[5][0] = new Celula(0, 0, null, "00");
 		matriz1[5][1] = new Celula(0, 0, null, "CI");
 		matriz1[5][2] = new Celula(0, 0, null, "00");
@@ -257,11 +318,13 @@ public class Jogo {
 
 					// verifica o vizinho da linha
 					try {
-						if(corBola.equals(matriz[i+1][j].getTexto()) && 
-							corBola.equals(matriz[i+2][j].getTexto())) {
+						if(corBola.equals(matriz[i][j+1].getTexto()) && 
+							corBola.equals(matriz[i][j+2].getTexto())) {
 							
 							// achou a trinca na linha
 							achouTrinca = true;
+							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
+									matriz[i][j+1].getTexto()+","+matriz[i][j+2].getTexto());
 							break;
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
@@ -269,11 +332,13 @@ public class Jogo {
 					}
 					// verifica o vizinho da coluna
 					try {
-						if(corBola.equals(matriz[i][j+1].getTexto()) && 
-							corBola.equals(matriz[i][j+2].getTexto())) {
+						if(corBola.equals(matriz[i+1][j].getTexto()) && 
+							corBola.equals(matriz[i+2][j].getTexto())) {
 							
 							// achou a trinca na coluna
 							achouTrinca = true;
+							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
+									matriz[i+1][j].getTexto()+","+matriz[i+2][j].getTexto());
 							break;
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
@@ -287,6 +352,8 @@ public class Jogo {
 							
 							// achou a trinca na coluna
 							achouTrinca = true;
+							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
+									matriz[i+1][j-1].getTexto()+","+matriz[i+2][j-2].getTexto());
 							break;
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
@@ -300,6 +367,8 @@ public class Jogo {
 							
 							// achou a trinca na coluna
 							achouTrinca = true;
+							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
+									matriz[i+1][j+1].getTexto()+","+matriz[i+2][j+2].getTexto());
 							break;
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
@@ -341,20 +410,6 @@ public class Jogo {
 
 					// verifica o vizinho da linha
 					try {
-						if(corBola.equals(matriz[i+1][j].getTexto()) && 
-							corBola.equals(matriz[i+2][j].getTexto())) {
-							
-							celulasTrinca.clear();
-							celulasTrinca.add(matriz[i][j]);
-							celulasTrinca.add(matriz[i+1][j]);
-							celulasTrinca.add(matriz[i+2][j]);
-							
-						}
-					} catch (ArrayIndexOutOfBoundsException e) {
-						continue;
-					}
-					// verifica o vizinho da coluna
-					try {
 						if(corBola.equals(matriz[i][j+1].getTexto()) && 
 							corBola.equals(matriz[i][j+2].getTexto())) {
 							
@@ -362,6 +417,20 @@ public class Jogo {
 							celulasTrinca.add(matriz[i][j]);
 							celulasTrinca.add(matriz[i][j+1]);
 							celulasTrinca.add(matriz[i][j+2]);
+							
+						}
+					} catch (ArrayIndexOutOfBoundsException e) {
+						continue;
+					}
+					// verifica o vizinho da coluna
+					try {
+						if(corBola.equals(matriz[i+1][j].getTexto()) && 
+							corBola.equals(matriz[i+2][j].getTexto())) {
+							
+							celulasTrinca.clear();
+							celulasTrinca.add(matriz[i][j]);
+							celulasTrinca.add(matriz[i+1][j]);
+							celulasTrinca.add(matriz[i+2][j]);
 							
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
@@ -484,10 +553,10 @@ public class Jogo {
 	}
 	
 	private void imprimeListaCelulas(String nome, List<Celula> celulas) {
-		System.out.print(nome+" "+celulas.size()+" [ ");
+		System.out.print(nome+" "+celulas.size()+" ");
 		for (int i = 0; i < celulas.size(); i++) {
 			if(null != celulas.get(i)) {
-				System.out.print("["+i+"]("+celulas.get(i).getX()+","+celulas.get(i).getY()+")->");
+				System.out.print("["+i+"-("+celulas.get(i).getX()+","+celulas.get(i).getY()+")]->");
 			}
 		}
 	}
@@ -524,11 +593,12 @@ public class Jogo {
 		Celula cel = null;
 		Cores cor = null;
 		for (int i = 0; i <= qtdBolasIniciais; i++) {
-			indice = ((int)(Math.random() * 100) % celulasVazias.size());
+			indice = ((int)(Math.random() * 100) % (celulasVazias.size()-i));
 			indiceCor = ((int)(Math.random() * 100) % Cores.values().length);
 			cor = Cores.values()[indiceCor];
 			cel = new Celula(celulasVazias.get(indice).getX(), celulasVazias.get(indice).getY(), cor, cor.getCodigo());
 			celulasPreenchidas.add(cel);
+			//celulasVazias.remove(cel);
 		}
 		
 		imprimeListaCelulas("Celulas Preenchidas=", celulasPreenchidas);
@@ -556,5 +626,9 @@ public class Jogo {
 			celulasVazias.remove(i);
 		}
 		imprimeListaCelulas("\nCelulas Vazias=", celulasVazias);
+		
+		//testaTrinca01(); // Não
+		//testaTrinca02(); // Sim
+
 	}
 }
