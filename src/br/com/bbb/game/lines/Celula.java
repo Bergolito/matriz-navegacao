@@ -12,12 +12,7 @@ public class Celula {
 	public Celula() {
 		super();
 	}
-//	public Celula(int x, int y, Cores cor) {
-//		super();
-//		this.x = x;
-//		this.y = y;
-//		this.cor = cor;
-//	}
+
 	public Celula(int x, int y, Cores cor, String t) {
 		super();
 		this.x = x;

@@ -122,12 +122,29 @@ public class Jogo {
 						cel = new Celula(i, j, null, TEXTO_CELULA_VAZIA);
 						matrizBolas[i][j] = cel;
 						celulasVazias.add(cel);
+						// TODO Corrigir aqui
 						//celulasPreenchidas.remove(cel);
 						continue;
 					}
 				}
 			}
 		}
+    	
+        // remove as novas bolas da lista de celulas preenchidas
+		Celula celRemover = null;
+//		List<Integer> listaIndicesRemover = new ArrayList<>();
+//		for (int i = 0; i < jogoLines.getCelulasPreenchidas().size(); i++) {
+//			celRemover = jogoLines.getCelulasPreenchidas().get(i);
+//			for (int j = 0; j < jogoLines.getCelulasVazias().size(); j++) {
+//				if(celRemover.getX() == jogoLines.getCelulasVazias().get(j).getX() && 
+//				   celRemover.getY() == jogoLines.getCelulasVazias().get(j).getY()) {
+//					
+//					listaIndicesRemover.add(j);
+//					jogoLines.getCelulasVazias().remove(j);
+//					break;
+//				}
+//			}
+//		}    	
 	}
 	
 	private void movimentaBola(int p1X, int p1Y, int p2X, int p2Y) {
@@ -169,7 +186,7 @@ public class Jogo {
 		int indiceCor = -1;
 		Celula cel = null;
 		Cores cor = null;
-		System.out.println("Novas bolas inseridas = ");
+		System.out.println("Novas bolas inseridas= ");
 		
 		List<Integer> listaIndices = geraIndicesAletatorios(celulasVazias.size(), qtdNovasBolas);
 		Random rand = new Random();
@@ -177,6 +194,7 @@ public class Jogo {
 			indiceCor = rand.nextInt(Cores.values().length);
 			cor = Cores.values()[indiceCor];
 			cel = new Celula(celulasVazias.get(indice).getX(), celulasVazias.get(indice).getY(), cor, cor.getCodigo());
+			System.out.print(" ("+celulasVazias.get(indice).getX()+","+celulasVazias.get(indice).getY()+")->");
 			celulasPreenchidas.add(cel);
 		}
 		
@@ -623,7 +641,7 @@ public class Jogo {
 			}
 		}
 		
-		imprimeListaIndices("Lista indices a remover=", listaIndicesRemover);
+		//imprimeListaIndices("Lista indices a remover=", listaIndicesRemover);
 //		for (Integer i : listaIndicesRemover) {
 //			celulasVazias.remove(i);
 //		}
