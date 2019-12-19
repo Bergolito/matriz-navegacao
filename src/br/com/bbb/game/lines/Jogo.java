@@ -105,7 +105,6 @@ public class Jogo {
 	        
 	        jogoLines.imprimeSizeCelulas("Celulas Vazias=", jogoLines.getCelulasVazias(), "Celulas Preenchidas=", jogoLines.getCelulasPreenchidas());
 	        
-	        //jogoLines.atualizaMatrizPrincipal(jogoLines.getCelulasPreenchidas());
 	        jogoLines.imprimeMatriz(jogoLines.getMatrizBolas());
 	        
 			jogoLines.preencheTabuleiro();
@@ -115,11 +114,15 @@ public class Jogo {
 
 	private void removeBolasTabuleiro(List<Celula> elementosTrinca) {
     	
+		Celula cel = null;
     	for (Celula elem : elementosTrinca) {
 			for (int i = 0; i < matrizBolas.length; i++) {
 				for (int j = 0; j < matrizBolas[i].length; j++) {
 					if(matrizBolas[i][j].getX() == elem.getX() && matrizBolas[i][j].getY() == elem.getY()) {
-						matrizBolas[i][j] = new Celula(i, j, null, TEXTO_CELULA_VAZIA);
+						cel = new Celula(i, j, null, TEXTO_CELULA_VAZIA);
+						matrizBolas[i][j] = cel;
+						celulasVazias.add(cel);
+						//celulasPreenchidas.remove(cel);
 						continue;
 					}
 				}
@@ -177,6 +180,8 @@ public class Jogo {
 			celulasPreenchidas.add(cel);
 		}
 		
+		atualizaMatrizPrincipal(celulasPreenchidas);
+		atualizaCelulasVazias();
         imprimeSizeCelulas("Celulas Vazias=", celulasVazias, " | Celulas Preenchidas=", celulasPreenchidas);
 	}
 	
@@ -197,6 +202,7 @@ public class Jogo {
     	score += pontos;  
     	
     	this.setScore(score);
+    	System.out.println("Score="+getScore());
 	}
 
 	/**
@@ -557,18 +563,18 @@ public class Jogo {
 	
 	private void imprimeListaCelulas(String nome, List<Celula> celulas) {
 		System.out.print(nome+" "+celulas.size()+" ");
-//		for (int i = 0; i < celulas.size(); i++) {
-//			if(null != celulas.get(i)) {
-//				System.out.print("["+i+"-("+celulas.get(i).getX()+","+celulas.get(i).getY()+")]->");
-//			}
-//		}
+		for (int i = 0; i < celulas.size(); i++) {
+			if(null != celulas.get(i)) {
+				System.out.print("["+i+"-("+celulas.get(i).getX()+","+celulas.get(i).getY()+")]->");
+			}
+		}
 	}
 
 	private void imprimeListaIndices(String nome, List<Integer> indices) {
 		System.out.print(nome+" "+indices.size()+" [ ");
-//		for (int i = 0; i < indices.size(); i++) {
-//			System.out.print(indices.get(i)+"->");
-//		}
+		for (int i = 0; i < indices.size(); i++) {
+			System.out.print(indices.get(i)+"->");
+		}
 	}
 
 	private void imprimeSizeCelulas(String nome1, List<Celula> celulas1, String nome2, List<Celula> celulas2) {
@@ -601,6 +607,30 @@ public class Jogo {
         return listaIndices;
 	}
 	
+	private void atualizaCelulasVazias() {
+		Celula celRemover = null;
+		List<Integer> listaIndicesRemover = new ArrayList<>();
+		for (int i = 0; i < celulasPreenchidas.size(); i++) {
+			celRemover = celulasPreenchidas.get(i);
+			for (int j = 0; j < celulasVazias.size(); j++) {
+				if(celRemover.getX() == celulasVazias.get(j).getX() && 
+				   celRemover.getY() == celulasVazias.get(j).getY()) {
+					
+					listaIndicesRemover.add(j);
+					celulasVazias.remove(j);
+					break;
+				}
+			}
+		}
+		
+		imprimeListaIndices("Lista indices a remover=", listaIndicesRemover);
+//		for (Integer i : listaIndicesRemover) {
+//			celulasVazias.remove(i);
+//		}
+		celulasVazias.removeAll(listaIndicesRemover);
+		imprimeSizeCelulas("\nCelulas Vazias= ", celulasVazias, " | Celulas Preenchidas=", celulasPreenchidas);
+	}
+	
 	private void inicializaJogo(int qtdBolasIniciais) {
 		// preenche matriz de bolas
 		Celula cel = null;
@@ -627,30 +657,32 @@ public class Jogo {
 		
         imprimeSizeCelulas("Celulas Vazias= ", celulasVazias, " | Celulas Preenchidas=", celulasPreenchidas);
 
+        
 		atualizaMatrizPrincipal(celulasPreenchidas);
+		atualizaCelulasVazias();
 		imprimeMatriz(matrizBolas);
 		
-		Celula celRemover = null;
-		List<Integer> listaIndicesRemover = new ArrayList<>();
-		for (int i = 0; i < celulasPreenchidas.size(); i++) {
-			celRemover = celulasPreenchidas.get(i);
-			for (int j = 0; j < celulasVazias.size(); j++) {
-				if(celRemover.getX() == celulasVazias.get(j).getX() && 
-				   celRemover.getY() == celulasVazias.get(j).getY()) {
-					
-					listaIndicesRemover.add(j);
-					celulasVazias.remove(j);
-					break;
-				}
-			}
-		}
+//		Celula celRemover = null;
+//		List<Integer> listaIndicesRemover = new ArrayList<>();
+//		for (int i = 0; i < celulasPreenchidas.size(); i++) {
+//			celRemover = celulasPreenchidas.get(i);
+//			for (int j = 0; j < celulasVazias.size(); j++) {
+//				if(celRemover.getX() == celulasVazias.get(j).getX() && 
+//				   celRemover.getY() == celulasVazias.get(j).getY()) {
+//					
+//					listaIndicesRemover.add(j);
+//					celulasVazias.remove(j);
+//					break;
+//				}
+//			}
+//		}
 
 		// 
-		imprimeListaIndices("Lista indices a remover=", listaIndicesRemover);
-		for (Integer i : listaIndicesRemover) {
-			celulasVazias.remove(i);
-		}
-		imprimeListaCelulas("\nCelulas Vazias=", celulasVazias);
+//		imprimeListaIndices("Lista indices a remover=", listaIndicesRemover);
+//		for (Integer i : listaIndicesRemover) {
+//			celulasVazias.remove(i);
+//		}
+		//imprimeListaCelulas("\nCelulas Vazias=", celulasVazias);
 		
 		//testaTrinca01(); // Não
 		//testaTrinca02(); // Sim
