@@ -1,8 +1,13 @@
 package br.com.bbb.game.lines;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Jogo {
 	
@@ -44,7 +49,7 @@ public class Jogo {
 		int p1Y = 0;
 		int p2X = 0;
 		int p2Y = 0;
-		boolean existeTrinca = false;
+		List<Celula> elementosTrinca = new ArrayList<>();
 		
 		while(!jogoLines.getCelulasVazias().isEmpty()) {
 			
@@ -67,7 +72,6 @@ public class Jogo {
 
 	        // cria mais qtdBolasNovas no tabuleiro
 	        System.out.println("Adicionando "+qtdNovasBolas+" novas bolas ao tabuleiro");
-	        
 	        jogoLines.preencheTabuleiroNovasBolas(qtdNovasBolas);
 	        
 	        // atualiza lista de celulas vazias quando preenche tabuleiro com novas bolas
@@ -88,19 +92,20 @@ public class Jogo {
 	        
 	        jogoLines.imprimeMatriz(jogoLines.getMatrizBolas());
 	        
-	        existeTrinca = jogoLines.verificaTrinca(jogoLines.getMatrizBolas());
-	        System.out.println("\nExiste trinca? "+existeTrinca);
-	        if(existeTrinca) {
+	        elementosTrinca = jogoLines.verificaTrinca(jogoLines.getMatrizBolas());
+	        System.out.println("\nExiste trinca? "+!elementosTrinca.isEmpty());
+	        if(!elementosTrinca.isEmpty()) {
+	        	
 	        	// remove celulas da trinca 
-	        	jogoLines.removeBolasTabuleiro(jogoLines.getMatrizBolas());
+	        	jogoLines.removeBolasTabuleiro(elementosTrinca);
+	        	
 	        	// atualiza score
-	        	List<Celula> celulasTrinca = jogoLines.retornaCelulasTrinca(jogoLines.getMatrizBolas());
-	        	jogoLines.atualizaScore(celulasTrinca);
+	        	jogoLines.atualizaScore(elementosTrinca);
 	        }
 	        
-	        jogoLines.imprimeListaCelulas("Celulas Vazias=", jogoLines.getCelulasVazias());
-	        jogoLines.imprimeListaCelulas("\nCelulas Preenchidas=", jogoLines.getCelulasPreenchidas());
-	        jogoLines.atualizaMatrizPrincipal(jogoLines.getCelulasPreenchidas());
+	        jogoLines.imprimeSizeCelulas("Celulas Vazias=", jogoLines.getCelulasVazias(), "Celulas Preenchidas=", jogoLines.getCelulasPreenchidas());
+	        
+	        //jogoLines.atualizaMatrizPrincipal(jogoLines.getCelulasPreenchidas());
 	        jogoLines.imprimeMatriz(jogoLines.getMatrizBolas());
 	        
 			jogoLines.preencheTabuleiro();
@@ -108,14 +113,14 @@ public class Jogo {
 		System.out.println("Jogo acabou!!!! Score ="+jogoLines.getScore());
 	}
 
-	private void removeBolasTabuleiro(Celula[][] matriz) {
-        List<Celula> celulasRemover = retornaCelulasTrinca(matriz);
+	private void removeBolasTabuleiro(List<Celula> elementosTrinca) {
     	
-    	for (Celula celula : celulasRemover) {
-			for (int i = 0; i < matriz.length; i++) {
-				for (int j = 0; j < matriz.length; j++) {
-					if(matriz[i][j].getX() == celula.getX() && matriz[i][j].getY() == celula.getY()) {
-						matriz[i][j] = new Celula(i, j, null, TEXTO_CELULA_VAZIA);
+    	for (Celula elem : elementosTrinca) {
+			for (int i = 0; i < matrizBolas.length; i++) {
+				for (int j = 0; j < matrizBolas[i].length; j++) {
+					if(matrizBolas[i][j].getX() == elem.getX() && matrizBolas[i][j].getY() == elem.getY()) {
+						matrizBolas[i][j] = new Celula(i, j, null, TEXTO_CELULA_VAZIA);
+						continue;
 					}
 				}
 			}
@@ -158,20 +163,21 @@ public class Jogo {
 
 	private void preencheTabuleiroNovasBolas(int qtdNovasBolas) {
 		// preenche celulas com Bolas iniciais
-		int indice = -1;
 		int indiceCor = -1;
 		Celula cel = null;
 		Cores cor = null;
 		System.out.println("Novas bolas inseridas = ");
-		for (int i = 0; i < qtdNovasBolas; i++) {
-			indice = ((int)(Math.random() * 100) % celulasVazias.size());
-			indiceCor = ((int)(Math.random() * 100) % Cores.values().length);
+		
+		List<Integer> listaIndices = geraIndicesAletatorios(celulasVazias.size(), qtdNovasBolas);
+		Random rand = new Random();
+		for (Integer indice : listaIndices) {
+			indiceCor = rand.nextInt(Cores.values().length);
 			cor = Cores.values()[indiceCor];
-			System.out.print("["+indice+"-("+celulasVazias.get(indice).getX()+","+celulasVazias.get(indice).getY()+")]->");
 			cel = new Celula(celulasVazias.get(indice).getX(), celulasVazias.get(indice).getY(), cor, cor.getCodigo());
 			celulasPreenchidas.add(cel);
-			celulasVazias.remove(cel);
 		}
+		
+        imprimeSizeCelulas("Celulas Vazias=", celulasVazias, " | Celulas Preenchidas=", celulasPreenchidas);
 	}
 	
 	private void atualizaScore(List<Celula> celulasRemover) {
@@ -307,9 +313,9 @@ public class Jogo {
 		System.out.println("\nExiste trinca? "+verificaTrinca(matriz1));
 	}
 	
-	private boolean verificaTrinca(Celula[][] matriz) {
-		boolean achouTrinca = false;
-
+	private List<Celula> verificaTrinca(Celula[][] matriz) {
+		List<Celula> elementosTrinca = new ArrayList<>();
+		
 		for (int i = 0; i < matriz.length; i++) {
 			for (int j = 0; j < matriz[i].length; j++) {
 				if(!TEXTO_CELULA_VAZIA.equals(matriz[i][j].getTexto())) {
@@ -322,9 +328,13 @@ public class Jogo {
 							corBola.equals(matriz[i][j+2].getTexto())) {
 							
 							// achou a trinca na linha
-							achouTrinca = true;
 							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
 									matriz[i][j+1].getTexto()+","+matriz[i][j+2].getTexto());
+							
+							elementosTrinca.add(matriz[i][j]);
+							elementosTrinca.add(matriz[i][j+1]);
+							elementosTrinca.add(matriz[i][j+2]);
+							
 							break;
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
@@ -336,9 +346,13 @@ public class Jogo {
 							corBola.equals(matriz[i+2][j].getTexto())) {
 							
 							// achou a trinca na coluna
-							achouTrinca = true;
 							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
 									matriz[i+1][j].getTexto()+","+matriz[i+2][j].getTexto());
+							
+							elementosTrinca.add(matriz[i][j]);
+							elementosTrinca.add(matriz[i+1][j]);
+							elementosTrinca.add(matriz[i+2][j]);
+							
 							break;
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
@@ -351,9 +365,13 @@ public class Jogo {
 							corBola.equals(matriz[i+2][j-2].getTexto())) {
 							
 							// achou a trinca na coluna
-							achouTrinca = true;
 							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
 									matriz[i+1][j-1].getTexto()+","+matriz[i+2][j-2].getTexto());
+							
+							elementosTrinca.add(matriz[i][j]);
+							elementosTrinca.add(matriz[i+1][j-1]);
+							elementosTrinca.add(matriz[i+2][j-2]);
+							
 							break;
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
@@ -366,9 +384,13 @@ public class Jogo {
 							corBola.equals(matrizBolas[i+2][j+2].getTexto())) {
 							
 							// achou a trinca na coluna
-							achouTrinca = true;
 							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
 									matriz[i+1][j+1].getTexto()+","+matriz[i+2][j+2].getTexto());
+							
+							elementosTrinca.add(matriz[i][j]);
+							elementosTrinca.add(matriz[i+1][j+1]);
+							elementosTrinca.add(matriz[i+2][j+2]);
+							
 							break;
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
@@ -378,27 +400,9 @@ public class Jogo {
 				}
 			}
 		}
-		return achouTrinca;
+		return elementosTrinca;
 	}
-
-	private List<Celula> elementosTrinca(String corBola, Celula cel1, Celula cel2) {
-		List<Celula> celulasTrinca = new ArrayList<>();
-		try {
-//			if(corBola.equals(matriz[i+1][j].getTexto()) && 
-//				corBola.equals(matriz[i+2][j].getTexto())) {
-//				
-//				celulasTrinca.clear();
-//				celulasTrinca.add(matriz[i][j]);
-//				celulasTrinca.add(matriz[i+1][j]);
-//				celulasTrinca.add(matriz[i+2][j]);
-//				
-//			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-			//continue;
-		}
-		return null;
-	}
-
+	
 	private List<Celula> retornaCelulasTrinca(Celula[][] matriz) {
 		List<Celula> celulasTrinca = new ArrayList<>();
 
@@ -549,59 +553,80 @@ public class Jogo {
 		for (Celula celula : preenchidas) {
 			matrizBolas[celula.getX()][celula.getY()] = celula;
 		}
-		
 	}
 	
 	private void imprimeListaCelulas(String nome, List<Celula> celulas) {
 		System.out.print(nome+" "+celulas.size()+" ");
-		for (int i = 0; i < celulas.size(); i++) {
-			if(null != celulas.get(i)) {
-				System.out.print("["+i+"-("+celulas.get(i).getX()+","+celulas.get(i).getY()+")]->");
-			}
-		}
+//		for (int i = 0; i < celulas.size(); i++) {
+//			if(null != celulas.get(i)) {
+//				System.out.print("["+i+"-("+celulas.get(i).getX()+","+celulas.get(i).getY()+")]->");
+//			}
+//		}
 	}
 
 	private void imprimeListaIndices(String nome, List<Integer> indices) {
 		System.out.print(nome+" "+indices.size()+" [ ");
-		for (int i = 0; i < indices.size(); i++) {
-			System.out.print(indices.get(i)+"->");
-		}
+//		for (int i = 0; i < indices.size(); i++) {
+//			System.out.print(indices.get(i)+"->");
+//		}
+	}
+
+	private void imprimeSizeCelulas(String nome1, List<Celula> celulas1, String nome2, List<Celula> celulas2) {
+		System.out.print(nome1+" "+celulas1.size()+" ");
+		System.out.print(nome2+" "+celulas2.size()+" ");
+	}
+	
+	private List<Integer> geraIndicesAletatorios(int numeroMaximo, int qtdNumeros) {
+		Random rand = new Random();
+		Set<Integer> conjuntoNumeros = new HashSet<>();
+		List<Integer> listaIndices = new ArrayList<>();
+		
+		do {
+			for (int i = 0; i < qtdNumeros; i++) {
+				conjuntoNumeros.add(rand.nextInt(numeroMaximo));
+			}
+			
+		} while (conjuntoNumeros.size() != qtdNumeros);
+		
+        // Creating an iterator 
+        Iterator<Integer> indices = conjuntoNumeros.iterator(); 
+  
+        // Displaying the values after iterating through the iterator 
+        while (indices.hasNext()) { 
+            listaIndices.add(indices.next());
+        } 
+        
+        Collections.sort(listaIndices);
+        
+        return listaIndices;
 	}
 	
 	private void inicializaJogo(int qtdBolasIniciais) {
-
 		// preenche matriz de bolas
+		Celula cel = null;
 		for (int i = 0; i < matrizBolas.length; i++) {
 			for (int j = 0; j < matrizBolas[i].length; j++) {
-				matrizBolas[i][j] = new Celula(i,j, null, TEXTO_CELULA_VAZIA);
+				cel = new Celula(i,j, null, TEXTO_CELULA_VAZIA);
+				matrizBolas[i][j] = cel;
+				// preenche celulas vazias
+				celulasVazias.add(cel);
 			}
 		}
 
-		// preenche celulas vazias
-		for (int i = 0; i < matrizBolas.length; i++) {
-			for (int j = 0; j < matrizBolas[i].length; j++) {
-				celulasVazias.add(new Celula(i,j, null, TEXTO_CELULA_VAZIA));
-			}
-		}
-		//
-		imprimeListaCelulas("Celulas Vazias=", celulasVazias);
-		imprimeMatriz(matrizBolas);
-		
 		// preenche celulas com Bolas iniciais
-		int indice = -1;
 		int indiceCor = -1;
-		Celula cel = null;
 		Cores cor = null;
-		for (int i = 0; i <= qtdBolasIniciais; i++) {
-			indice = ((int)(Math.random() * 100) % (celulasVazias.size()-i));
-			indiceCor = ((int)(Math.random() * 100) % Cores.values().length);
+		List<Integer> listaIndices = geraIndicesAletatorios(celulasVazias.size(), qtdBolasIniciais);
+		Random rand = new Random();
+		for (Integer indice : listaIndices) {
+			indiceCor = rand.nextInt(Cores.values().length);
 			cor = Cores.values()[indiceCor];
 			cel = new Celula(celulasVazias.get(indice).getX(), celulasVazias.get(indice).getY(), cor, cor.getCodigo());
 			celulasPreenchidas.add(cel);
-			//celulasVazias.remove(cel);
 		}
 		
-		imprimeListaCelulas("Celulas Preenchidas=", celulasPreenchidas);
+        imprimeSizeCelulas("Celulas Vazias= ", celulasVazias, " | Celulas Preenchidas=", celulasPreenchidas);
+
 		atualizaMatrizPrincipal(celulasPreenchidas);
 		imprimeMatriz(matrizBolas);
 		
@@ -629,6 +654,5 @@ public class Jogo {
 		
 		//testaTrinca01(); // Não
 		//testaTrinca02(); // Sim
-
 	}
 }
