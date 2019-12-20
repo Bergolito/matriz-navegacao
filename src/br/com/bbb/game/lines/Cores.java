@@ -6,8 +6,8 @@ public enum Cores {
 	AMA("AM","AMARELO"),
 	CIA("CI","CIANO"),
 	LAR("LA","LARANJA"),
-	ROS("RS","ROSA"),
-	ROX("RX","ROXO"),
+	//ROS("RS","ROSA"),
+	//ROX("RX","ROXO"),
 	VDE("VD","VERDE"),
 	VME("VM","VERMELHO");
 	
