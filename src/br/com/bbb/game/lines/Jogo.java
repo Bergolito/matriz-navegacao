@@ -231,7 +231,7 @@ public class Jogo {
 			indiceCor = rand.nextInt(Cores.values().length);
 			cor = Cores.values()[indiceCor];
 			cel = new Celula(celulasVazias.get(indice).getX(), celulasVazias.get(indice).getY(), cor, cor.getCodigo());
-			System.out.print(" ("+celulasVazias.get(indice).getX()+","+celulasVazias.get(indice).getY()+")->");
+			System.out.print(" ("+celulasVazias.get(indice).getX()+","+celulasVazias.get(indice).getY()+","+cor.getCodigo()+")->");
 			novasBolas.add(cel);
 		}
 		
