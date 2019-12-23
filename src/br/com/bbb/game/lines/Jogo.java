@@ -128,44 +128,41 @@ public class Jogo {
 	
 	private boolean validaMovimentacaoBola(int p1X, int p1Y, int p2X, int p2Y) {
 		Celula celOrigem = null;
-		Celula celDestino = new Celula();
+		Celula celDestino = null;
 		
 		boolean bolaOrigemVazia = false;
 		boolean bolaDestinoPreenchida = false;
 		
 		for (int i = 0; i < matrizBolas.length; i++) {
 			for (int j = 0; j < matrizBolas[i].length; j++) {
+				
 				if((p1X == i && p1Y == j)) {
 					
 					celOrigem = matrizBolas[i][j];
-					if(null != celOrigem && !TEXTO_CELULA_VAZIA.equals(celOrigem.getTexto())) {
-						continue;
-					} 
-					else {
+					if(null != celOrigem && TEXTO_CELULA_VAZIA.equals(celOrigem.getTexto())) {
 						bolaOrigemVazia = true;
 						break;
-					}
+					} 
 				}
 
-				if(!bolaOrigemVazia) {
-					if((p2X == i && p2Y == j)) {
-						celDestino = matrizBolas[i][j];
-						if(null != celDestino && TEXTO_CELULA_VAZIA.equals(celDestino.getTexto())) {
-							continue;
-						} 
-						else {
-							bolaDestinoPreenchida = true;
-							break;
-						}
+				if((p2X == i && p2Y == j)) {
+					celDestino = matrizBolas[i][j];
+					if(null != celDestino && !TEXTO_CELULA_VAZIA.equals(celDestino.getTexto())) {
+						bolaDestinoPreenchida = true;
+						break;
 					}
 				}
 			}
 		}
 		
-		if(bolaOrigemVazia || bolaDestinoPreenchida) {
-			System.out.println("Erro de movimentação de peças ");
+		if(bolaOrigemVazia) {
+			System.out.println("Erro de movimentação de peças: Bola de origem não pode ser vazia.");
 			return false;
-		} 
+			
+		} else if(bolaDestinoPreenchida) {
+			System.out.println("Erro de movimentação de peças: Bola de destino não pode estar preenchida. ");
+			return false;
+		}
 
 		return true;
 	}
@@ -196,6 +193,19 @@ public class Jogo {
 				}
 			}
 		}
+		
+		Celula cel = null;
+		celulasVazias.clear();
+		for (int i = 0; i < matrizBolas.length; i++) {
+			for (int j = 0; j < matrizBolas[i].length; j++) {
+				cel = matrizBolas[i][j];
+				if(cel.getTexto().equals(TEXTO_CELULA_VAZIA)) {
+					//
+					celulasVazias.add(cel);
+				}
+			}
+		}
+		System.out.println("Celulas Vazias= "+ celulasVazias.size() +" | Celulas Preenchidas= "+ (getRows()*getColumns() - celulasVazias.size()));
 	}
 
 	private void preencheTabuleiroNovasBolas(int qtdNovasBolas) {
