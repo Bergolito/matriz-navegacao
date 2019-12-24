@@ -17,7 +17,7 @@ public class Jogo {
 	private int score;
 	private int rows;
 	private int columns;
-	private int qtdBolasLinha;
+	private int qtdBolasTrinca;
 	private Celula[][] matrizBolas;
 	private List<Celula> celulasVazias = new ArrayList<>();
 
@@ -28,7 +28,7 @@ public class Jogo {
 	public Jogo(int lin, int col, int trinca) {
 		this.rows = lin;
 		this.columns = col;
-		this.qtdBolasLinha = trinca;
+		this.qtdBolasTrinca = trinca;
 		this.matrizBolas = new Celula[lin][col];
 	}
 	
@@ -274,8 +274,10 @@ public class Jogo {
 							corBola.equals(matriz[i][j+2].getTexto())) {
 							
 							// achou a trinca na linha
-							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
-									matriz[i][j+1].getTexto()+","+matriz[i][j+2].getTexto());
+							System.out.println("Trinca ="+
+									matriz[i][j].getTexto()+","+
+									matriz[i][j+1].getTexto()+","+
+									matriz[i][j+2].getTexto());
 							
 							elementosTrinca.clear();
 							elementosTrinca.add(matriz[i][j]);
@@ -294,8 +296,10 @@ public class Jogo {
 							corBola.equals(matriz[i+2][j].getTexto())) {
 							
 							// achou a trinca na coluna
-							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
-									matriz[i+1][j].getTexto()+","+matriz[i+2][j].getTexto());
+							System.out.println("Trinca ="+
+									matriz[i][j].getTexto()+","+
+									matriz[i+1][j].getTexto()+","+
+									matriz[i+2][j].getTexto());
 							
 							elementosTrinca.clear();
 							elementosTrinca.add(matriz[i][j]);
@@ -314,8 +318,10 @@ public class Jogo {
 							corBola.equals(matriz[i+2][j-2].getTexto())) {
 							
 							// achou a trinca na coluna
-							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
-									matriz[i+1][j-1].getTexto()+","+matriz[i+2][j-2].getTexto());
+							System.out.println("Trinca ="+
+									matriz[i][j].getTexto()+","+
+									matriz[i+1][j-1].getTexto()+","+
+									matriz[i+2][j-2].getTexto());
 							
 							elementosTrinca.clear();
 							elementosTrinca.add(matriz[i][j]);
@@ -334,8 +340,10 @@ public class Jogo {
 							corBola.equals(matrizBolas[i+2][j+2].getTexto())) {
 							
 							// achou a trinca na coluna
-							System.out.println("Trinca ="+matriz[i][j].getTexto()+","+
-									matriz[i+1][j+1].getTexto()+","+matriz[i+2][j+2].getTexto());
+							System.out.println("Trinca ="+
+									matriz[i][j].getTexto()+","+
+									matriz[i+1][j+1].getTexto()+","+
+									matriz[i+2][j+2].getTexto());
 							
 							elementosTrinca.clear();
 							elementosTrinca.add(matriz[i][j]);
@@ -347,7 +355,6 @@ public class Jogo {
 					} catch (ArrayIndexOutOfBoundsException e) {
 						continue;
 					}
-					
 				}
 			}
 		}
@@ -378,12 +385,12 @@ public class Jogo {
 		this.columns = columns;
 	}
 
-	public int getQtdBolasLinha() {
-		return qtdBolasLinha;
+	public int getQtdBolasTrinca() {
+		return qtdBolasTrinca;
 	}
 
-	public void setQtdBolasLinha(int qtdBolasLinha) {
-		this.qtdBolasLinha = qtdBolasLinha;
+	public void setQtdBolasTrinca(int qtdBolasTrinca) {
+		this.qtdBolasTrinca = qtdBolasTrinca;
 	}
 
 	public Celula[][] getMatrizBolas() {
