@@ -74,8 +74,22 @@ public class Sudoku9x9Test {
 			}
 			contador++;
 		} while(sudoku.existeCelulaVazia(matriz) && sudoku.existeCelula01Possib(matriz) && contador < (linhas*colunas));
-		
+
 		sudoku.imprimeMatriz(matriz);
+		
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				
+				if(matriz[i][j] == 0) {
+					if(sudoku.qtdPossibilidadesCelula(i, j, matriz).size() == 2) {
+						System.out.print("("+i+","+j+") -> [ ");
+						sudoku.qtdPossibilidadesCelula(i, j, matriz).forEach(num->System.out.print(num+", "));
+						System.out.println(" ] ");
+					} 
+				}
+			}
+		}
+		
 	}
 	
 }
