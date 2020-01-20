@@ -214,7 +214,7 @@ public class Sudoku {
 	}
 	
 	public void setValorNaLinhaColuna(int valor, int linha, int coluna, int[][] matriz) {
-		System.out.println("Setando o valor "+valor+" na linha "+linha+" coluna "+coluna+"...");
+		System.out.println("Setando valor => ("+linha+","+coluna+")="+valor);
 		matriz[linha][coluna] = valor;
 	}
 	
@@ -306,12 +306,58 @@ public class Sudoku {
 			for (int j = 0; j < matriz[i].length; j++) {
 				
 				if(j != matriz[i].length-1) {
-					System.out.print(" "+matriz[i][j]);
+					if(matriz[i][j] != 0) {
+						System.out.print(" "+matriz[i][j]);	
+					} else {
+						System.out.print(" _");
+					}
+					
 				}
 				else {
-					System.out.println(" "+matriz[i][j]+" ]");
+					
+					if(matriz[i][j] != 0) {
+						System.out.println(" "+matriz[i][j]+" ]");
+
+					} else {
+						System.out.println(" _ ]");
+					}
 				}
 			}
+		}
+	}
+	
+	public void analisaNumerosNaHorizontal() {
+		
+		
+	}
+	
+	public void tentaInferirValores(int[][] matriz) {
+		List<int[][]> listaMatrizes = new ArrayList<>();
+		int[][] matrizClonada1 = null;
+		int[][] matrizClonada2 = null;
+		
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				if(matriz[i][j] == 0) {
+					matrizClonada1 = matriz.clone();
+					matrizClonada2 = matriz.clone();
+					
+					if(qtdPossibilidadesCelula(i, j, matriz).size() == 2 ) {
+						matrizClonada1[i][j] = qtdPossibilidadesCelula(i, j, matriz).get(0); 
+						matrizClonada2[i][j] = qtdPossibilidadesCelula(i, j, matriz).get(1);
+						
+						listaMatrizes.add(matrizClonada1);
+						listaMatrizes.add(matrizClonada2);
+					}
+				}
+			}
+		}
+		
+		int cont = 0;
+		for (int[][] matX : listaMatrizes) {
+			System.out.println("Matriz inferida "+(cont++));
+			System.out.println("Existe inconsistencia = "+verficaInconsistenciaMatriz(matX));
+			imprimeMatriz(matX);
 		}
 	}
 	
@@ -347,6 +393,8 @@ public class Sudoku {
 		} while(sudoku.existeCelulaVazia(matriz) && sudoku.existeCelula01Possib(matriz));
 		
 		sudoku.imprimeMatriz(matriz);
+		
+		sudoku.tentaInferirValores(matriz);
 	}
 	
 	public int getRows() {

@@ -6,52 +6,44 @@ public class Sudoku9x9Test {
 		int linhas = 9;
 		int colunas = 9;
 		int[][] matriz = new int [linhas][colunas];
-
-		matriz[0][0] = 5;
-		matriz[0][1] = 8;
-		matriz[0][2] = 6;
-		matriz[0][3] = 3;
-		matriz[0][5] = 4;
-		matriz[0][6] = 9;
-		matriz[0][7] = 2;
-		matriz[0][8] = 7;
-
-		matriz[1][0] = 7;
-		matriz[1][5] = 5;
-
-		matriz[2][0] = 4;
-		matriz[2][5] = 9;
-
-		matriz[3][0] = 1;
-		matriz[3][5] = 6;
-		                
-		matriz[4][0] = 6;
-		matriz[4][1] = 2;
-		matriz[4][2] = 7;
-		matriz[4][3] = 1;
-		matriz[4][5] = 3;
-		matriz[4][6] = 5;
-		matriz[4][7] = 4;
-		matriz[4][8] = 9;
-
-		matriz[5][3] = 2;
-		matriz[5][8] = 8;
-
-		matriz[6][3] = 4;
-		matriz[6][8] = 5;
-
-		matriz[7][3] = 7;
-		matriz[7][8] = 1;
-
-		matriz[8][0] = 9;
-		matriz[8][1] = 4;
-		matriz[8][2] = 1;
-		matriz[8][3] = 5;
-		matriz[8][5] = 2;
-		matriz[8][6] = 7;
-		matriz[8][7] = 8;
-		matriz[8][8] = 3;
-
+		
+		//
+		matriz[1][0] = 8;
+		matriz[1][1] = 9;
+		matriz[1][2] = 4;
+		matriz[1][3] = 2;
+		matriz[1][5] = 6;
+		matriz[1][8] = 1;
+		//
+		matriz[2][2] = 2;
+		matriz[2][6] = 6;
+		matriz[2][8] = 8;
+		//
+		matriz[3][3] = 3;
+		matriz[3][5] = 9;
+		//
+		matriz[4][0] = 1;
+		matriz[4][4] = 4;
+		matriz[4][8] = 2;
+		//
+		matriz[5][0] = 9;
+		matriz[5][2] = 7;
+		matriz[5][3] = 6;
+		matriz[5][5] = 2;
+		matriz[5][6] = 3;
+		//
+		matriz[6][0] = 7;
+		matriz[6][5] = 4;
+		matriz[6][6] = 2;
+		//
+		matriz[7][4] = 7;
+		matriz[7][6] = 4;
+		matriz[7][7] = 1;
+		matriz[7][8] = 5;
+		//
+		matriz[8][0] = 3;
+		matriz[8][4] = 2;
+		matriz[8][7] = 6;
 
 		Sudoku sudoku = new Sudoku(linhas, colunas, matriz);
 
@@ -77,19 +69,68 @@ public class Sudoku9x9Test {
 
 		sudoku.imprimeMatriz(matriz);
 		
+		System.out.println("--------------------------------------");
 		for (int i = 0; i < matriz.length; i++) {
 			for (int j = 0; j < matriz[i].length; j++) {
-				
 				if(matriz[i][j] == 0) {
-					if(sudoku.qtdPossibilidadesCelula(i, j, matriz).size() == 2) {
+					if(sudoku.qtdPossibilidadesCelula(i, j, matriz).size() == 2 ) {
 						System.out.print("("+i+","+j+") -> [ ");
 						sudoku.qtdPossibilidadesCelula(i, j, matriz).forEach(num->System.out.print(num+", "));
 						System.out.println(" ] ");
-					} 
+					}
 				}
 			}
 		}
-		
+		System.out.println("--------------------------------------");
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				if(matriz[i][j] == 0) {
+					if(sudoku.qtdPossibilidadesCelula(i, j, matriz).size() == 3 ) {
+						System.out.print("("+i+","+j+") -> [ ");
+						sudoku.qtdPossibilidadesCelula(i, j, matriz).forEach(num->System.out.print(num+", "));
+						System.out.println(" ] ");
+					}
+				}
+			}
+		}
+		System.out.println("--------------------------------------");
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				if(matriz[i][j] == 0) {
+					if(sudoku.qtdPossibilidadesCelula(i, j, matriz).size() == 4 ) {
+						System.out.print("("+i+","+j+") -> [ ");
+						sudoku.qtdPossibilidadesCelula(i, j, matriz).forEach(num->System.out.print(num+", "));
+						System.out.println(" ] ");
+					}
+				}
+			}
+		}
+		System.out.println("--------------------------------------");
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				if(matriz[i][j] == 0) {
+					if(sudoku.qtdPossibilidadesCelula(i, j, matriz).size() == 5 ) {
+						System.out.print("("+i+","+j+") -> [ ");
+						sudoku.qtdPossibilidadesCelula(i, j, matriz).forEach(num->System.out.print(num+", "));
+						System.out.println(" ] ");
+					}
+				}
+			}
+		}
+		System.out.println("--------------------------------------");
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				if(matriz[i][j] == 0) {
+					if(sudoku.qtdPossibilidadesCelula(i, j, matriz).size() == 6 ) {
+						System.out.print("("+i+","+j+") -> [ ");
+						sudoku.qtdPossibilidadesCelula(i, j, matriz).forEach(num->System.out.print(num+", "));
+						System.out.println(" ] ");
+					}
+				}
+			}
+		}
+		System.out.println("--------------------------------------");
+		sudoku.tentaInferirValores(matriz);
 	}
 	
 }
