@@ -69,6 +69,7 @@ public class Sudoku9x9Test {
 
 		sudoku.imprimeMatriz(matriz);
 		
+		/*
 		System.out.println("--------------------------------------");
 		for (int i = 0; i < matriz.length; i++) {
 			for (int j = 0; j < matriz[i].length; j++) {
@@ -130,7 +131,9 @@ public class Sudoku9x9Test {
 			}
 		}
 		System.out.println("--------------------------------------");
-		sudoku.tentaInferirValores(matriz);
+		*/
+		//sudoku.tentaInferirValores(matriz);
+		sudoku.analisaSolucao(matriz);
 	}
 	
 }
