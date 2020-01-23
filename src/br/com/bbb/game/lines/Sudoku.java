@@ -346,7 +346,6 @@ public class Sudoku {
 		int linhaInicio = linhasPossiveis.get(0);
 		int linhaFim = linhasPossiveis.get(2);
 		
-		//for (int i = 0; i < matriz.length; i++) {
 		for (int i = linhaInicio; i <= linhaFim; i++) {
 			for (int j = 0; j < matriz[i].length; j++) {
 				

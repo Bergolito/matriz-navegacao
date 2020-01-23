@@ -15,6 +15,44 @@ public class SudokuUtil {
 		//
 	}
 
+	public static boolean existeInconsistenciaMatriz(int[][] matriz) {
+		boolean inconsistencia = false;
+		
+		// verifica nas linhas
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				if(!isUnique(matriz[i])) {
+					inconsistencia = true;
+					break;
+				}
+			}
+		}
+		// verifica nas colunas
+		int[] colunas = new int[matriz.length]; 
+		for (int j = 0; j < matriz.length; j++) {
+			for (int i = 0; i < matriz[j].length; i++) {
+				colunas[i] = matriz[i][j];
+			}
+			if(!isUnique(colunas)) {
+				inconsistencia = true;
+				break;
+			}
+		}
+		
+		return inconsistencia;
+	}
+	
+	public static boolean isUnique(int[] nums){
+	    Set<Integer> set = new HashSet<>(nums.length);
+
+	    for (int a : nums) {
+	        if (!set.add(a))
+	            return false;
+	    }
+
+	    return true;
+	}	
+	
 	public static void imprimeMatrizPossibilidades(int[][] matriz) {
 		System.out.println("\n\n|==== Matriz de Possibilidades ====|");
 		
