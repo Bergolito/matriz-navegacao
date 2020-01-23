@@ -2,6 +2,17 @@ package br.com.bbb.game.lines;
 
 public class Sudoku9x9Test {
 
+	/**
+		0 [ _ _ _ _ _ _ _ _ _ ]
+		1 [ 8 9 4 2 _ 6 _ _ 1 ]
+		2 [ _ _ 2 _ _ _ 6 _ 8 ]
+		3 [ _ _ _ 3 _ 9 _ _ _ ]
+		4 [ 1 _ _ _ 4 _ _ _ 2 ]
+		5 [ 9 _ 7 6 _ 2 3 _ _ ]
+		6 [ 7 _ _ _ _ 4 2 _ _ ]
+		7 [ _ _ _ _ 7 _ 4 1 5 ]
+		8 [ 3 _ _ _ 2 _ _ 6 _ ]
+	 */
 	public static void main(String[] args) {
 		int linhas = 9;
 		int colunas = 9;
@@ -47,7 +58,7 @@ public class Sudoku9x9Test {
 
 		Sudoku sudoku = new Sudoku(linhas, colunas, matriz);
 
-		sudoku.imprimeMatriz(matriz);
+		SudokuUtil.imprimeMatriz(matriz);
 		
 		int valor = -1;
 		int contador = 0;
@@ -57,17 +68,17 @@ public class Sudoku9x9Test {
 				for (int j = 0; j < matriz[i].length; j++) {
 					
 					if(matriz[i][j] == 0) {
-						if(sudoku.qtdPossibilidadesCelula(i, j, matriz).size() == 1) {
-							valor = sudoku.qtdPossibilidadesCelula(i, j, matriz).get(0);
-							sudoku.setValorNaLinhaColuna(valor, i, j, matriz);
+						if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 1) {
+							valor = SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(0);
+							SudokuUtil.setValorNaLinhaColuna(valor, i, j, matriz, "RG01");
 						} 
 					}
 				}
 			}
 			contador++;
-		} while(sudoku.existeCelulaVazia(matriz) && sudoku.existeCelula01Possib(matriz) && contador < (linhas*colunas));
+		} while(SudokuUtil.existeCelulaVazia(matriz) && SudokuUtil.existeCelula01Possib(matriz) && contador < (linhas*colunas));
 
-		sudoku.imprimeMatriz(matriz);
+		SudokuUtil.imprimeMatriz(matriz);
 		
 		sudoku.analisaSolucao(matriz);
 	}

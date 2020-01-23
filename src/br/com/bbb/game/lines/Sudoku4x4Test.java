@@ -2,6 +2,12 @@ package br.com.bbb.game.lines;
 
 public class Sudoku4x4Test {
 
+	/*
+		0 [ 1 _ _ 4 ]
+		1 [ _ 2 _ _ ]
+		2 [ _ _ 4 _ ]
+		3 [ 3 _ _ _ ]
+	 */
 	public static void main(String[] args) {
 		int linhas = 4;
 		int colunas = 4;
@@ -14,7 +20,7 @@ public class Sudoku4x4Test {
 
 		Sudoku sudoku = new Sudoku(linhas, colunas, matriz);
 
-		sudoku.imprimeMatriz(matriz);
+		SudokuUtil.imprimeMatriz(matriz);
 		
 		int valor = -1;
 		int contador = 0;
@@ -24,17 +30,17 @@ public class Sudoku4x4Test {
 				for (int j = 0; j < matriz[i].length; j++) {
 					
 					if(matriz[i][j] == 0) {
-						if(sudoku.qtdPossibilidadesCelula(i, j, matriz).size() == 1) {
-							valor = sudoku.qtdPossibilidadesCelula(i, j, matriz).get(0);
-							sudoku.setValorNaLinhaColuna(valor, i, j, matriz);
+						if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 1) {
+							valor = SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(0);
+							SudokuUtil.setValorNaLinhaColuna(valor, i, j, matriz, "RG01");
 						} 
 					}
 				}
 			}
 			
-		} while(sudoku.existeCelulaVazia(matriz) && sudoku.existeCelula01Possib(matriz) && contador < (linhas*colunas));
+		} while(SudokuUtil.existeCelulaVazia(matriz) && SudokuUtil.existeCelula01Possib(matriz) && contador < (linhas*colunas));
 		
-		sudoku.imprimeMatriz(matriz);
+		SudokuUtil.imprimeMatriz(matriz);
 	}
 	
 }
