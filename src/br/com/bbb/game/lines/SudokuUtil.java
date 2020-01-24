@@ -42,6 +42,15 @@ public class SudokuUtil {
 		return inconsistencia;
 	}
 	
+	public static String retornaNumerosPossibs(int i, int j, int[][] matriz) {
+		StringBuilder str = new StringBuilder();
+		for (int num : qtdPossibilidadesCelula(i, j, matriz)) {
+			str.append(" "+num);
+		}
+		
+		return str.toString();
+	}
+	
 	public static boolean isUnique(int[] nums){
 	    Set<Integer> set = new HashSet<>(nums.length);
 
