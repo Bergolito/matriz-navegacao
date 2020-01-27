@@ -68,29 +68,7 @@ public class Sudoku9x9Test {
 		matriz[8][7] = 6;
 
 		Sudoku sudoku = new Sudoku(linhas, colunas, matriz);
-
 		SudokuUtil.imprimeMatriz(matriz);
-		
-		int valor = -1;
-		int contador = 0;
-		do {
-			
-			for (int i = 0; i < matriz.length; i++) {
-				for (int j = 0; j < matriz[i].length; j++) {
-					
-					if(matriz[i][j] == 0) {
-						if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 1) {
-							valor = SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(0);
-							SudokuUtil.setValorNaLinhaColuna(valor, i, j, matriz, "RG01");
-						} 
-					}
-				}
-			}
-			contador++;
-		} while(SudokuUtil.existeCelulaVazia(matriz) && SudokuUtil.existeCelula01Possib(matriz) && contador < (linhas*colunas));
-
-		SudokuUtil.imprimeMatriz(matriz);
-		
 		sudoku.analisaSolucao(matriz);
 	}
 	

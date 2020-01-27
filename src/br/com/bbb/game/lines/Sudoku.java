@@ -319,54 +319,61 @@ public class Sudoku {
 	
 	public void analisaSolucao(int[][] matriz) {
 		int[][] matrizOriginal = new int[matriz.length][matriz.length];
-		
 		for (int i = 0; i < matriz.length; i++) {
 			for (int j = 0; j < matriz[i].length; j++) {
 				matrizOriginal[i][j] = matriz[i][j];
 			}
 		}
+		SudokuUtil.imprimeMatriz(matrizOriginal);
+
+		// analisa na horizontal
+	    analisaNumerosNaHorizontal(matriz);
 		
+		// analisa na vertical
+		analisaNumerosNaVertical(matriz);
+
 		int numeroAleatorio = -1;
 		int indiceAleatorio = -1;
 		int contador = 0;
 		Random random = new Random();
-		for (int i = 0; i < matriz.length; i++) {
-			for (int j = 0; j < matriz[i].length; j++) {
-				
-				contador++;
-				
-				if(matriz[i][j] == 0) {
-					if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 1) {
-						System.out.println("\n\n\n Matriz inconsistente!!!");
-						SudokuUtil.imprimeMatriz(matriz);
-						
-						matriz = new int[matrizOriginal.length][matrizOriginal.length];
-						for (int ii = 0; ii < matrizOriginal.length; ii++) {
-							for (int jj = 0; jj < matrizOriginal[ii].length; jj++) {
-								matriz[ii][jj] = matrizOriginal[ii][jj];
+		while(contador < 1_000_000) {
+
+			for (int i = 0; i < matriz.length; i++) {
+				for (int j = 0; j < matriz[i].length; j++) {
+					
+					contador++;
+					
+					if(matriz[i][j] == 0) {
+						if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 0) {
+							System.out.println("\n\n\n Matriz inconsistente!!!");
+							
+							matriz = new int[matrizOriginal.length][matrizOriginal.length];
+							for (int ii = 0; ii < matrizOriginal.length; ii++) {
+								for (int jj = 0; jj < matrizOriginal[ii].length; jj++) {
+									matriz[ii][jj] = matrizOriginal[ii][jj];
+								}
 							}
-						}		
-						//
-						//i = 0;
-						//j = 0;
+							
+							System.out.println("Zera a matriz principal...");
+							//
+							i = 0;
+							j = 0;
+							SudokuUtil.imprimeMatriz(matriz);
+						}
+						if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 1) {
+							SudokuUtil.setValorNaLinhaColuna(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(0), i, j, matriz, "RG01");
+						}
+						else if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() >= 2) {
+							indiceAleatorio = random.nextInt(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size());
+							numeroAleatorio = SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(indiceAleatorio);
+							SudokuUtil.setValorNaLinhaColuna(numeroAleatorio, i, j, matriz, "RGXXX");
+						}
 					}
-					if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 1) {
-						SudokuUtil.setValorNaLinhaColuna(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(0), i, j, matriz, "RG01");
-					}
-					else if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() >= 2) {
-						indiceAleatorio = random.nextInt(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size());
-						numeroAleatorio = SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(indiceAleatorio);
-						SudokuUtil.setValorNaLinhaColuna(numeroAleatorio, i, j, matriz, "RGXXX");
-					}
-				}
-				
-				if(contador == 1_000_000) {
-					SudokuUtil.imprimeMatriz(matriz);
-					break;
 				}
 			}
 		}
 		
+		System.out.println("Contador = "+contador);
 		SudokuUtil.imprimeMatriz(matriz);
 	}
 	
