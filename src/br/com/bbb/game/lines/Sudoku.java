@@ -2,9 +2,12 @@ package br.com.bbb.game.lines;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Sudoku {
+	
+	private List<Posicao> listaCelulas02Possibs = new ArrayList<>();
 	
 	public Sudoku() {
 		//
@@ -315,11 +318,151 @@ public class Sudoku {
 	}
 	
 	public void analisaSolucao(int[][] matriz) {
+		int[][] matrizOriginal = new int[matriz.length][matriz.length];
+		
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				matrizOriginal[i][j] = matriz[i][j];
+			}
+		}
+		
+		int numeroAleatorio = -1;
+		int indiceAleatorio = -1;
+		int contador = 0;
+		Random random = new Random();
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				
+				contador++;
+				
+				if(matriz[i][j] == 0) {
+					if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 1) {
+						System.out.println("\n\n\n Matriz inconsistente!!!");
+						SudokuUtil.imprimeMatriz(matriz);
+						
+						matriz = new int[matrizOriginal.length][matrizOriginal.length];
+						for (int ii = 0; ii < matrizOriginal.length; ii++) {
+							for (int jj = 0; jj < matrizOriginal[ii].length; jj++) {
+								matriz[ii][jj] = matrizOriginal[ii][jj];
+							}
+						}		
+						//
+						//i = 0;
+						//j = 0;
+					}
+					if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 1) {
+						SudokuUtil.setValorNaLinhaColuna(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(0), i, j, matriz, "RG01");
+					}
+					else if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() >= 2) {
+						indiceAleatorio = random.nextInt(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size());
+						numeroAleatorio = SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(indiceAleatorio);
+						SudokuUtil.setValorNaLinhaColuna(numeroAleatorio, i, j, matriz, "RGXXX");
+					}
+				}
+				
+				if(contador == 1_000_000) {
+					SudokuUtil.imprimeMatriz(matriz);
+					break;
+				}
+			}
+		}
+		
+		SudokuUtil.imprimeMatriz(matriz);
+	}
+	
+	public void analisaSolucao02(int[][] matriz) {
+		
 		// analisa na horizontal
-		analisaNumerosNaHorizontal(matriz);
+	    analisaNumerosNaHorizontal(matriz);
 		
 		// analisa na vertical
 		analisaNumerosNaVertical(matriz);
+		
+		//
+		analisaMatrizPossibilidades(matriz);
+	}
+	
+	public boolean verificaInconsistencia(int[][] matriz) {
+		boolean inconsistencia = false;
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				if(matriz[i][j] == 0) {
+					if(SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 0) {
+						System.out.println("\n\n Achou celula sem possibilidade => ("+i+","+j+") . Matriz incosistente!!!");
+						inconsistencia = true;
+						break;
+					}
+				}
+			}
+		}
+		return inconsistencia;
+	}
+	
+	public void analisaMatrizPossibilidades(int[][] matriz) {
+		int possib1 = -1;
+		int possib2 = -1;
+		boolean existeInconPossib1 = false;
+		boolean existeInconPossib2 = false;
+		
+		listaCelulas02Possibs = new ArrayList<>();
+		
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+
+				if(matriz[i][j] == 0 && 
+					SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 2) {
+					
+					System.out.println("Analisando célula ("+i+","+j+") = ["+SudokuUtil.retornaNumerosPossibs(i, j, matriz)+"]...");
+					possib1 = SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(0);
+					possib2 = SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(1);
+					
+					Posicao p1 = new Posicao(i, j, possib1);
+					Posicao p2 = new Posicao(i, j, possib2);
+					
+					listaCelulas02Possibs.add(p1);
+					listaCelulas02Possibs.add(p2);
+				}
+
+			}
+		}
+		//
+		SudokuUtil.imprimeMatriz(matriz);
+
+		System.out.println("Lista de celulas com 02 possibilidades ");
+		Posicao p = null;
+		for (int i = 0; i < listaCelulas02Possibs.size(); i++) {
+			p = listaCelulas02Possibs.get(i);
+			matriz[p.getX()][p.getY()] = p.getValor(); 
+			System.out.println(i+"("+p.getX()+","+p.getY()+")="+p.getValor()+" Qtd Total = "+SudokuUtil.qtdTotalPossibilidadesMatriz(matriz));
+		}
+		
+		int linha = -1;
+		int coluna = -1;
+		for (int i = 0; i < listaCelulas02Possibs.size(); i+=2) {
+			possib1 = listaCelulas02Possibs.get(i).getValor();
+			linha = listaCelulas02Possibs.get(i).getX();
+			coluna = listaCelulas02Possibs.get(i).getY();
+			
+			matriz[linha][coluna] = possib1;
+			existeInconPossib1 = verificaInconsistencia(matriz);
+
+			possib2 = listaCelulas02Possibs.get(i+1).getValor();
+			matriz[linha][coluna] = possib2;
+			existeInconPossib2 = verificaInconsistencia(matriz);
+			
+			if(existeInconPossib1 && !existeInconPossib2) {
+				// possib2 está OK - seta
+				matriz[linha][coluna] = 0;
+				SudokuUtil.setValorNaLinhaColuna(possib2, linha, coluna, matriz, "RN05");
+				
+			} else if(!existeInconPossib1 && existeInconPossib2) {
+				// possib1 está OK - seta
+				matriz[linha][coluna] = 0;
+				SudokuUtil.setValorNaLinhaColuna(possib1, linha, coluna, matriz, "RN05");
+			}
+		}
+		
+		SudokuUtil.imprimeMatriz(matriz);
 	}
 	
 	private void analisaCamadaHorizontal(
@@ -519,4 +662,12 @@ public class Sudoku {
 		}
 	}
 
+	public List<Posicao> getListaCelulas02Possibs() {
+		return listaCelulas02Possibs;
+	}
+
+	public void setListaCelulas02Possibs(List<Posicao> listaCelulas02Possibs) {
+		this.listaCelulas02Possibs = listaCelulas02Possibs;
+	}
+	
 }

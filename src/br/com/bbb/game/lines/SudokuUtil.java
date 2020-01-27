@@ -42,6 +42,26 @@ public class SudokuUtil {
 		return inconsistencia;
 	}
 	
+	public static int findMin(int[] array) {
+	    if (array == null || array.length < 1)
+	        return -1;
+	    
+	    int min = array[0];
+	    int max = array[0];
+
+	    for (int i = 1; i <= array.length - 1; i++) {
+	        if (max < array[i]) {
+	            max = array[i];
+	        }
+
+	        if (min > array[i]) {
+	            min = array[i];
+	        }
+	    }
+	    System.out.println("min: " + min + "\nmax: " + max);
+	    return min;
+	}
+	
 	public static String retornaNumerosPossibs(int i, int j, int[][] matriz) {
 		StringBuilder str = new StringBuilder();
 		for (int num : qtdPossibilidadesCelula(i, j, matriz)) {
@@ -289,6 +309,19 @@ public class SudokuUtil {
 		return qtd;
 	}
 
+	public static int qtdTotalPossibilidadesMatriz(int[][] matriz) {
+		int qtdTotal = 0;
+	
+		int qtdCelula = 0;
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				qtdCelula = qtdPossibilidadesCelula(i, j, matriz).size();
+				qtdTotal += qtdCelula;
+			}
+		}
+		return qtdTotal;
+	}
+	
 	public static List<Integer> qtdPossibilidadesCelula(int linha, int coluna, int[][] matriz) {
 		Set<Integer> listaElementos = new HashSet<>();
 		List<Integer> elementosRetorno = new ArrayList<>();
@@ -665,25 +698,6 @@ public class SudokuUtil {
 		}
 	}
 
-//	public static boolean verficaInconsistenciaMatriz(int[][] matriz) {
-//		boolean achouInconsistencia = false;
-//
-//		int valor = -1;
-//		for (int i = 0; i < matriz.length; i++) {
-//			for (int j = 0; j < matriz[i].length; j++) {
-//				if(matriz[i][j] != 0) {
-//					valor = matriz[i][j];
-//					if(existeNumeroMatriz(valor, i, j, matriz)) {
-//						System.out.println(i+","+j+"="+valor);
-//						achouInconsistencia = true;
-//						break;
-//					}
-//				}
-//			}
-//		}
-//		return achouInconsistencia;
-//	}
-	
 	public static boolean existeNumeroMatriz(int valor, int linha, int coluna, int[][] matriz) {
 		boolean achouInconsistencia = false;
 
