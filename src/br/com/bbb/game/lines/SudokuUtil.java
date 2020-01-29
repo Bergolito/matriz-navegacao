@@ -108,6 +108,39 @@ public class SudokuUtil {
 		}
 	}
 	
+	public static int celulasRestantesLinha(int linha, int[][] matriz) {
+		int contador = 0;
+		for (int j = 0; j < matriz.length; j++) {
+			if(matriz[linha][j] == 0) {
+				contador++;	
+			}
+		}
+		return contador;
+	}
+	
+	public static void linha01celulasRestantes(int linha, int[][] matriz) {
+		int contador = 0;
+		if(celulasRestantesLinha(linha, matriz) == 1) {
+			
+		}
+		//return contador;
+	}	
+
+	public static int celulasRestantesColuna(int coluna, int[][] matriz) {
+		int contador = 0;
+		for (int i = 0; i < matriz.length; i++) {
+			if(matriz[i][coluna] == 0) {
+				contador++;	
+			}
+		}
+
+		return contador;
+	}
+	
+	public static int celulasRestantesQuadrante(int linha, int[][] matriz) {
+		return -1;
+	}
+	
 	public static int existeNumeroQuadrante(int numero, int quadrante, int[][] matriz) {
 		int achou = 0;
 		int linhaInicio = -1;
