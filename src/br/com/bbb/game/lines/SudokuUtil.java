@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SudokuUtil {
+
+	public static int infericoes = 0;
 	
 	private SudokuUtil() {
 		//
@@ -681,6 +683,7 @@ public class SudokuUtil {
 		if(matriz[linha][coluna] == 0) {
 			System.out.println("|>>>>>>>>>>  Setando valor => ("+linha+","+coluna+")="+valor+" Regra="+regraId+" ]");
 			matriz[linha][coluna] = valor;	
+			infericoes++;
 		} else {
 			System.out.print("\nSudoku: Não é possível setar numero em celula preenchida.  ");
 			System.out.println(" | => ("+linha+","+coluna+")="+valor+" Regra="+regraId+" ]");
@@ -778,18 +781,18 @@ public class SudokuUtil {
 		return achouCelula01Possib;
 	}
 	
-	public static String retornaCelula01Possib(int[][] matriz) {
+	public static Posicao retornaCelula01Possib(int[][] matriz) {
 		String str = "";
-
+		Posicao pos = null;
 		for (int i = 0; i < matriz.length; i++) {
 			for (int j = 0; j < matriz[i].length; j++) {
 				if( (matriz[i][j] == 0) && (SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).size() == 1) ) {
-					str= i+","+j+","+SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(0);
+					pos = new Posicao(i, j, SudokuUtil.qtdPossibilidadesCelula(i, j, matriz).get(0));
 					break;
 				}
 			}
 		}
-		return str;
+		return pos;
 	}
 	
 }
