@@ -13,6 +13,8 @@ public class SudokuUtil {
 
 	public static int infericoes = 0;
 	
+	public static Integer[] arrayNumerosPossiveis = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	
 	private SudokuUtil() {
 		//
 	}
@@ -142,6 +144,23 @@ public class SudokuUtil {
 	public static int celulasRestantesQuadrante(int linha, int[][] matriz) {
 		return -1;
 	}
+	
+	public static List<Integer> retornaColunasQuadrante(int quadrante, int[][] matriz) {
+		List<Integer> colunas = new ArrayList<>();
+		
+		// linhas 0, 1, 2 
+		if(quadrante == 1 || quadrante == 4 || quadrante == 7) {
+			colunas.add(0);colunas.add(1);colunas.add(2);
+		
+		} else if(quadrante == 2 || quadrante == 5 || quadrante == 8) {
+			colunas.add(3);colunas.add(4);colunas.add(5);
+			
+		} else if(quadrante == 3 || quadrante == 6 || quadrante == 9) {
+			colunas.add(6);colunas.add(7);colunas.add(8);
+		}
+
+		return colunas;
+	}	
 	
 	public static int existeNumeroQuadrante(int numero, int quadrante, int[][] matriz) {
 		int achou = 0;
@@ -380,12 +399,12 @@ public class SudokuUtil {
         
         Collections.sort(elementosRetorno);
 
-        Integer[] arrayNumerosPossiveis = null;
-		if(matriz.length == 4) {
-			arrayNumerosPossiveis = new Integer[] { 1, 2, 3, 4 };
-		} else if(matriz.length == 9) {
-			arrayNumerosPossiveis = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-		}
+//        Integer[] arrayNumerosPossiveis = null;
+//		if(matriz.length == 4) {
+//			arrayNumerosPossiveis = new Integer[] { 1, 2, 3, 4 };
+//		} else if(matriz.length == 9) {
+//			arrayNumerosPossiveis = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+//		}
 
 		List<Integer> numerosPossiveis = Arrays.asList(arrayNumerosPossiveis);
 
@@ -709,22 +728,40 @@ public class SudokuUtil {
 	public static void imprimeMatriz(int[][] matriz) {
 		System.out.print("");
 		for (int i = 0; i < matriz.length; i++) {
-			System.out.print(i+" [");
+			
+			if(i != 3 && i != 6) {
+				System.out.print(i+" [");
+			} else if(i == 3 || i == 6) {
+				System.out.println("   ------------------------");
+				System.out.print(i+" [");
+			}
 			for (int j = 0; j < matriz[i].length; j++) {
 				
 				if(j != matriz[i].length-1) {
 					
 					if(matriz[i][j] != 0) {
-						System.out.print(" "+matriz[i][j]);	
+						
+						if(j != 3 && j != 6 ) {
+							System.out.print(" "+matriz[i][j]);	
+						} else if(j == 3 || j == 6) {
+							System.out.print(" | "+matriz[i][j]);
+						}
+							
 					} else {
-						System.out.print(" _");
+						
+						if(j != 3 && j != 6 ) {
+							System.out.print(" _");	
+						} else if(j == 3 || j == 6) {
+							System.out.print(" | _");
+						}
+						
 					}
 					
 				}
 				else {
 					
 					if(matriz[i][j] != 0) {
-						System.out.println(" "+matriz[i][j]+" ]");
+						System.out.println(" "+matriz[i][j]+" ]");	
 
 					} else {
 						System.out.println(" _ ]");
@@ -780,9 +817,63 @@ public class SudokuUtil {
 		}
 		return achouCelula01Possib;
 	}
+
+	public static boolean existeColuna01PosicaoRestante(int coluna, int[][] matriz) {
+		boolean achouColuna01restante = false;
+		int contador = 0;
+		for (int i = 0; i < matriz.length; i++) {
+				if( (matriz[i][coluna] == 0) ) {
+					contador++;
+				}
+		}
+		if(contador == 1) {
+			achouColuna01restante = true;
+		}
+		return achouColuna01restante;
+	}
+
+	public static Posicao posicaoColuna01PosicaoRestante(int coluna, int[][] matriz) {
+		List<Integer> numerosEncontrados = new ArrayList<>();
+		int linhaVazia = -1;
+		for (int i = 0; i < matriz.length; i++) {
+				if( matriz[i][coluna] != 0 ) {
+					numerosEncontrados.add(matriz[i][coluna]);
+				} else if( matriz[i][coluna] == 0 ) {
+					linhaVazia = i;
+				}
+		}
+
+        Integer[] arrayNumerosPossiveis = null;
+		if(matriz.length == 4) {
+			arrayNumerosPossiveis = new Integer[] { 1, 2, 3, 4 };
+		} else if(matriz.length == 9) {
+			arrayNumerosPossiveis = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		}
+
+		List<Integer> numerosPossiveis = Arrays.asList(arrayNumerosPossiveis);		
+		int valor = numerosPossiveis.stream()
+				.distinct().
+				filter(aObject -> !numerosEncontrados.contains(aObject)).
+				collect(Collectors.toList()).get(0);
+		
+		return new Posicao(linhaVazia, coluna, valor);
+	}
+	
+	public static boolean existeLinha01PosicaoRestante(int linha, int[][] matriz) {
+		boolean achouLinha01restante = false;
+		int contador = 0;
+		for (int j = 0; j < matriz.length; j++) {
+				if( (matriz[linha][j] == 0) ) {
+					contador++;
+				}
+		}
+		if(contador == 1) {
+			achouLinha01restante = true;
+		}
+		return achouLinha01restante;
+	}
 	
 	public static Posicao retornaCelula01Possib(int[][] matriz) {
-		String str = "";
 		Posicao pos = null;
 		for (int i = 0; i < matriz.length; i++) {
 			for (int j = 0; j < matriz[i].length; j++) {
