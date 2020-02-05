@@ -104,7 +104,7 @@ public class SudokuMaster {
 			
 			//
 			SudokuUtil.imprimeMatriz(matriz);
-			matrizIncosistente = SudokuUtil.existeInconsistenciaMatriz(matriz);
+			//matrizIncosistente = SudokuUtil.existeInconsistenciaMatriz(matriz);
 			System.out.println("Matriz eh inconsistente = "+matrizIncosistente);
 			
 			if(matrizIncosistente) {

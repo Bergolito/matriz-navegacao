@@ -109,7 +109,7 @@ public class Sudoku9x9InconsistenciaTest {
 		matriz[8][7] = 9;
 		matriz[8][8] = 1;
 
-		System.out.println("Existe inconsistencia na matriz = "+SudokuUtil.existeInconsistenciaMatriz(matriz));
+		//System.out.println("Existe inconsistencia na matriz = "+SudokuUtil.existeInconsistenciaMatriz(matriz));
 	}
 	
 }
