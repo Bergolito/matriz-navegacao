@@ -6,17 +6,41 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Sudoku {
+
+	// constantes
+	private static final String DEBUG_MODE = "DEBUG";
+	private static final String PRODUCAO_MODE = "PROD";
+	private static final Integer[] arrayNumerosPossiveis = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	
-	public Integer[] arrayNumerosPossiveis = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	
+	// atributos
 	private List<Integer> numerosPossiveis = new ArrayList<>();
-			
+	private String nivelLog;			
+	
+	public String getNivelLog() {
+		return nivelLog;
+	}
+
+	public void setNivelLog(String nivelLog) {
+		this.nivelLog = nivelLog;
+	}
+
 	public Sudoku() {
 		//
 	}
 
 	public Sudoku(int lin, int col, int[][] mat) {
 		mat = new int[lin][col];
+		numerosPossiveis = Arrays.asList(arrayNumerosPossiveis);
+	}
+
+	public Sudoku(int lin, int col, int[][] mat, String logLevel) {
+		mat = new int[lin][col];
+		// nível do log
+		if(null != logLevel) {
+			this.nivelLog = DEBUG_MODE; 
+		}else {
+			this.nivelLog = PRODUCAO_MODE; 
+		}
 		numerosPossiveis = Arrays.asList(arrayNumerosPossiveis);
 	}
 	
@@ -768,7 +792,6 @@ public class Sudoku {
 		if(SudokuUtil.existeCelula01Possib(matriz)) {
 			Posicao celula01Possib = SudokuUtil.retornaCelula01Possib(matriz);
 			SudokuUtil.setValorNaLinhaColuna(celula01Possib.getValor(), celula01Possib.getX(), celula01Possib.getY(), matriz, "RG01");
-			//SudokuUtil.imprimeMatriz(matriz);
 		}
 	}
 			
@@ -837,7 +860,7 @@ public class Sudoku {
 					
 					if( (quadrante1 + quadrante2 + quadrante3) == 1) {
 						
-						System.out.println("Analisando na Horizontal (01-Quad-Preenc) ("+i+","+j+") = "+numeroAnalisado+"... ");
+						exibirMsg("Analisando na Horizontal (01-Quad-Preenc) ("+i+","+j+") = "+numeroAnalisado+"... ", getNivelLog());
 						
 						// verifica os 02 quadrantes nao preenchidos
 						if(quadrante1 == 1) {
@@ -980,7 +1003,7 @@ public class Sudoku {
 						
 						if( (quadrante1 + quadrante2 + quadrante3) == 1) {
 							
-							System.out.println("Analisando na Vertical (01-Quad-Preenc) ("+i+","+j+") = "+numeroAnalisado+"... ");
+							exibirMsg("Analisando na Vertical (01-Quad-Preenc) ("+i+","+j+") = "+numeroAnalisado+"... ", getNivelLog());
 							
 							// verifica os 02 quadrantes nao preenchidos
 							if(quadrante1 == 1) {
@@ -1209,6 +1232,12 @@ public class Sudoku {
 		return contador;
 	}
 	
+	public static void exibirMsg(String msg, String mode) {
+		if(DEBUG_MODE.equals(mode)) {
+			System.out.println(msg);
+		}
+	}
+	
 	// TODO Reduzir de 27 para 15
 	private void analisaCamadaHorizontal02QuadrantesPreenchidos(
 			int[][] matriz, List<Integer> linhasPossiveis) {
@@ -1242,7 +1271,7 @@ public class Sudoku {
 					
 					if( (quadrante1 + quadrante2 + quadrante3) == 2) {
 						
-						System.out.println("Analisando na Horizontal (02-Quads-Preenc) ("+i+","+j+") = "+numeroAnalisado+"... ");
+						exibirMsg("Analisando na Horizontal (02-Quads-Preenc) ("+i+","+j+") = "+numeroAnalisado+"... ", getNivelLog());
 						
 						// analisa 
 						linhaQuadrante01 = SudokuUtil.qualLinhaNumeroEstaNoQuadrante(numeroAnalisado, quandrantesPossiveis.get(0), matriz); // 1
@@ -1341,7 +1370,7 @@ public class Sudoku {
 					
 					if( (quadrante1 + quadrante2 + quadrante3) == 2) {
 						
-						System.out.println("Analisando na Vertical (02-Quads-Preench) ("+i+","+j+") = "+numeroAnalisado+"... ");
+						exibirMsg("Analisando na Vertical (02-Quads-Preench) ("+i+","+j+") = "+numeroAnalisado+"... ", getNivelLog());
 						
 						// analisa 
 						colunaQuadrante01 = SudokuUtil.qualColunaNumeroEstaNoQuadrante(numeroAnalisado, quandrantesPossiveis.get(0), matriz); // 1

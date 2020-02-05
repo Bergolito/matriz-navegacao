@@ -31,6 +31,7 @@ public class Sudoku9x9FacilTest {
 	public static void main(String[] args) {
 		int linhas = 9;
 		int colunas = 9;
+		String LOG_LEVEL_DEBUG = "DEBUG";
 		int[][] matriz = new int [linhas][colunas];
 
 		//
@@ -71,9 +72,15 @@ public class Sudoku9x9FacilTest {
 		//
 		matriz[8][6] = 7;
 
-		Sudoku sudoku = new Sudoku(linhas, colunas, matriz);
+		long inicio = System.currentTimeMillis();
+		Sudoku sudoku = new Sudoku(linhas, colunas, matriz, null);
+		System.out.println("Matriz inicial:");
 		SudokuUtil.imprimeMatriz(matriz);
+		System.out.println("Qtd celulas vazias = "+SudokuUtil.qtdCelulasVazias(matriz));
 		sudoku.analisaSolucao(matriz);
+		long fim = System.currentTimeMillis();
+		long duracao = (long)fim - inicio;
+		System.out.println("Achou a solução em "+duracao+" ms");
 	}
 	
 }

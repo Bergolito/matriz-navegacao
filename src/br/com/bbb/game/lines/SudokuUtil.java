@@ -19,26 +19,6 @@ public class SudokuUtil {
 		//
 	}
 
-//	public static int findMin(int[] array) {
-//	    if (array == null || array.length < 1)
-//	        return -1;
-//	    
-//	    int min = array[0];
-//	    int max = array[0];
-//
-//	    for (int i = 1; i <= array.length - 1; i++) {
-//	        if (max < array[i]) {
-//	            max = array[i];
-//	        }
-//
-//	        if (min > array[i]) {
-//	            min = array[i];
-//	        }
-//	    }
-//	    System.out.println("min: " + min + "\nmax: " + max);
-//	    return min;
-//	}
-	
 	public static String retornaNumerosPossibs(int i, int j, int[][] matriz) {
 		StringBuilder str = new StringBuilder();
 		for (int num : qtdPossibilidadesCelula(i, j, matriz)) {
@@ -59,32 +39,6 @@ public class SudokuUtil {
 	    return true;
 	}	
 	
-	public static void imprimeMatrizPossibilidades(int[][] matriz) {
-		System.out.println("\n\n|==== Matriz de Possibilidades ====|");
-		
-		for (int i = 0; i < matriz.length; i++) {
-			System.out.print(i+" [");
-			for (int j = 0; j < matriz[i].length; j++) {
-				
-				if(j != matriz[i].length-1) {
-					if(matriz[i][j] == 0) {
-						System.out.print(" "+qtdPossibilidadesCelula(i, j, matriz).size());	
-					} else {
-						System.out.print(" _");
-					}
-				}
-				else {
-					
-					if(matriz[i][j] == 0) {
-						System.out.println(" "+qtdPossibilidadesCelula(i, j, matriz).size()+" ]");
-					} else {
-						System.out.println(" _ ]");
-					}
-				}
-			}
-		}
-	}
-	
 	public static int celulasRestantesLinha(int linha, int[][] matriz) {
 		int contador = 0;
 		for (int j = 0; j < matriz.length; j++) {
@@ -94,13 +48,23 @@ public class SudokuUtil {
 		}
 		return contador;
 	}
+
+	public static int qtdCelulasVazias(int[][] matriz) {
+		int contador = 0;
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz.length; j++) {
+				if(matriz[i][j] == 0) {
+					contador++;	
+				}
+			}
+		}
+		return ++contador;
+	}
 	
 	public static void linha01celulasRestantes(int linha, int[][] matriz) {
-		int contador = 0;
 		if(celulasRestantesLinha(linha, matriz) == 1) {
 			
 		}
-		//return contador;
 	}	
 
 	public static int celulasRestantesColuna(int coluna, int[][] matriz) {
@@ -110,7 +74,6 @@ public class SudokuUtil {
 				contador++;	
 			}
 		}
-
 		return contador;
 	}
 	
@@ -1038,6 +1001,12 @@ public class SudokuUtil {
 			achouQuadrante02restantes = true;
 		}
 		return achouQuadrante02restantes;
+	}
+	
+	public static void exibirMsg(String msg, String mode) {
+		if("DEBUG".equals(mode)) {
+			System.out.println(msg);
+		}
 	}
 	
 	public static Posicao retornaQuadrante01PosicaoRestante(int[][] matriz) {
