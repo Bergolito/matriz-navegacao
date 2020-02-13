@@ -24,7 +24,7 @@ public class Jogo {
 	public Jogo() {
 		//
 	}
-
+	
 	public Jogo(int lin, int col, int trinca) {
 		this.rows = lin;
 		this.columns = col;
@@ -258,7 +258,79 @@ public class Jogo {
     	System.out.println("Score="+getScore());
 	}
 
-	private List<Celula> verificaTrinca(Celula[][] matriz) {
+	// TODO Reduzir de 72 para 15
+	public List<Celula> verificaTrinca(Celula[][] matriz) {
+		List<Celula> elementosTrinca = new ArrayList<>();
+		boolean achouTrinca = false;
+		
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz[i].length; j++) {
+				if(!TEXTO_CELULA_VAZIA.equals(matriz[i][j].getTexto())) {
+
+					String corBola = matriz[i][j].getTexto();
+					
+					// varre na linha
+					try {
+						elementosTrinca.clear();
+						achouTrinca = false;
+						if(matriz[i][j+1].getTexto().equals(corBola)) {
+							for (int k = j; k < matriz.length; k++) {
+								if(matriz[i][k].getTexto().equals(corBola)) {
+									elementosTrinca.add(matriz[i][k]);				
+								}
+							}
+						}
+						
+						if(elementosTrinca.size() >= getQtdBolasTrinca()) {
+							achouTrinca = true;
+							System.out.println(" Achou trinca na linha !!!");
+							for (int k = 0; k < elementosTrinca.size(); k++) {
+								System.out.print(" "+elementosTrinca.get(k).getTexto());
+							}
+							break;
+						}
+						
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					
+					if(!achouTrinca) {
+						// varre na coluna
+						try {
+							elementosTrinca.clear();
+							achouTrinca = false;
+							if(matriz[i+1][j].getTexto().equals(corBola)) {
+								for (int k = i; k < matriz.length; k++) {
+									if(matriz[k][j].getTexto().equals(corBola)) {
+										elementosTrinca.add(matriz[k][j]);				
+									}
+								}
+							}
+							
+							if(elementosTrinca.size() >= getQtdBolasTrinca()) {
+								achouTrinca = true;
+								System.out.println(" Achou trinca na coluna !!!");
+								for (int k = 0; k < elementosTrinca.size(); k++) {
+									System.out.print(" "+elementosTrinca.get(k).getTexto());
+								}
+								break;
+							}
+							
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+					}
+					
+					// varre nas diagonais
+					
+				}
+			}
+		}
+		return elementosTrinca;
+	}
+	
+	/*
+	private List<Celula> verificaTrincaOLD(Celula[][] matriz) {
 		List<Celula> elementosTrinca = new ArrayList<>();
 		
 		for (int i = 0; i < matriz.length; i++) {
@@ -360,6 +432,7 @@ public class Jogo {
 		}
 		return elementosTrinca;
 	}
+	*/
 	
 	public int getScore() {
 		return score;
