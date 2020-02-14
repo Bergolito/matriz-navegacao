@@ -35,7 +35,7 @@ public class Jogo {
 	public static void main(String[] args) {
 		int linhas = 4;
 		int colunas = 4;
-		int trinca = 2;
+		int trinca = 3;
 		int qtdBolasIniciais = 2;
 		int qtdNovasBolas = 2;
 
@@ -76,8 +76,9 @@ public class Jogo {
 	        } while (!validaMovimento);
 	        
 	        elementosTrinca = jogoLines.verificaTrinca(jogoLines.getMatrizBolas());
-	        System.out.println("\nExiste trinca? "+!elementosTrinca.isEmpty());
-	        if(!elementosTrinca.isEmpty()) {
+	        //boolean existeTrinca = (!elementosTrinca.isEmpty() && elementosTrinca.size() >= jogoLines.getQtdBolasTrinca());
+	        System.out.println("\nExiste trinca? "+jogoLines.existeTrinca(elementosTrinca));
+	        if(jogoLines.existeTrinca(elementosTrinca)) {
 	        	
 	        	// remove celulas da trinca 
 	        	jogoLines.removeBolasTabuleiro(elementosTrinca);
@@ -89,6 +90,12 @@ public class Jogo {
 
 		        // cria mais qtdBolasNovas no tabuleiro
 		        jogoLines.preencheTabuleiroNovasBolas(qtdNovasBolas);
+		        //existeTrinca = (!elementosTrinca.isEmpty() && elementosTrinca.size() >= jogoLines.getQtdBolasTrinca());
+		        if(jogoLines.existeTrinca(elementosTrinca)) {
+		        	// remove celulas da trinca 
+		        	jogoLines.removeBolasTabuleiro(elementosTrinca);
+		        	jogoLines.atualizaScore(elementosTrinca);
+		        }	
 		        jogoLines.imprimeMatriz(jogoLines.getMatrizBolas());
 	        	
 	        }
@@ -99,6 +106,10 @@ public class Jogo {
 		System.out.println("Jogo acabou!!!! Score ="+jogoLines.getScore());
 	}
 
+	private boolean existeTrinca(List<Celula> elementosTrinca) {
+		return (!elementosTrinca.isEmpty() && elementosTrinca.size() >= getQtdBolasTrinca());
+	}
+	
 	private void removeBolasTabuleiro(List<Celula> elementosTrinca) {
     	
 		Celula cel = null;
@@ -227,6 +238,13 @@ public class Jogo {
 
 		Random rand = new Random();
 		novasBolas.clear();
+		
+		if(!listaIndices.isEmpty() && listaIndices.size() == 2) { 
+			System.out.println("2 Novas bolas OK!");
+		}
+		if(listaIndices == null || listaIndices.isEmpty()) {
+			System.out.println("Novas bolas vazio!!!!");
+		}
 		for (Integer indice : listaIndices) {
 			indiceCor = rand.nextInt(Cores.values().length);
 			cor = Cores.values()[indiceCor];
@@ -261,7 +279,7 @@ public class Jogo {
 	// TODO Reduzir de 72 para 15
 	public List<Celula> verificaTrinca(Celula[][] matriz) {
 		List<Celula> elementosTrinca = new ArrayList<>();
-		boolean achouTrinca = false;
+		//boolean achouTrinca = false;
 		
 		for (int i = 0; i < matriz.length; i++) {
 			for (int j = 0; j < matriz[i].length; j++) {
@@ -272,28 +290,30 @@ public class Jogo {
 					// varre na linha
 					try {
 						elementosTrinca.clear();
-						achouTrinca = false;
+						//achouTrinca = false;
 						if(matriz[i][j+1].getTexto().equals(corBola)) {
 							for (int k = j; k < matriz.length; k++) {
-								if(matriz[i][k].getTexto().equals(corBola)) {
+								if(corBola.equals(matriz[i][k].getTexto())) {
 									elementosTrinca.add(matriz[i][k]);				
 								}
 							}
 						}
 						
 						if(elementosTrinca.size() >= getQtdBolasTrinca()) {
-							achouTrinca = true;
+							//achouTrinca = true;
 							System.out.println(" Achou trinca na linha !!!");
 							for (int k = 0; k < elementosTrinca.size(); k++) {
 								System.out.print(" "+elementosTrinca.get(k).getTexto());
 							}
-							break;
+							//break;
+							return elementosTrinca;
 						}
 						
 					} catch (Exception e) {
 						// TODO: handle exception
 					}
 					
+					/*
 					if(!achouTrinca) {
 						// varre na coluna
 						try {
@@ -320,7 +340,7 @@ public class Jogo {
 							// TODO: handle exception
 						}
 					}
-					
+					*/
 					// varre nas diagonais
 					
 				}
